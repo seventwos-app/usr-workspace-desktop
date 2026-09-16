@@ -154,7 +154,7 @@ jobs:
               working-directory: apps/desktop
               run: |
                   if [ -f changelog.Debian ]; then
-                      echo "ED_DEBIAN_CHANGELOG=changelog.Debian" >> $GITHUB_ENV
+                      echo "SEVENTWOS_WORKSPACE_DEBIAN_CHANGELOG=changelog.Debian" >> "$GITHUB_ENV"
                   fi
 
             - name: Build App

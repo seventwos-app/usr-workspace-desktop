@@ -1,0 +1,9 @@
+* @seventwos-app/engineering
+
+# Security policy, automation, signing, entitlements, and packaging require Security review.
+/SECURITY.md @seventwos-app/engineering @seventwos-app/security
+/.github/ @seventwos-app/engineering @seventwos-app/security
+/apps/desktop/electron-builder.ts @seventwos-app/engineering @seventwos-app/security
+/apps/desktop/build/ @seventwos-app/engineering @seventwos-app/security
+/apps/desktop/src/media-auth.ts @seventwos-app/engineering @seventwos-app/security
+/apps/desktop/src/webcontents-handler.ts @seventwos-app/engineering @seventwos-app/security

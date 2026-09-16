@@ -113,6 +113,12 @@ No signing secrets are accepted because Seventwos does not yet have Apple or Win
 accounts exist, add signing in a reviewed change using protected environments and Seventwos-prefixed secrets only.
 Do not add credentials to this repository.
 
+Windows package builds accept `SEVENTWOS_WORKSPACE_SIGNTOOL_SUBJECT_NAME` and
+`SEVENTWOS_WORKSPACE_SIGNTOOL_THUMBPRINT`. Linux package builds accept
+`SEVENTWOS_WORKSPACE_DEBIAN_CHANGELOG`. The inherited `ED_SIGNTOOL_SUBJECT_NAME`,
+`ED_SIGNTOOL_THUMBPRINT`, and `ED_DEBIAN_CHANGELOG` names remain fallback aliases for compatibility with existing
+private build environments; new automation must use the Seventwos-prefixed names.
+
 # Profiles
 
 To run multiple instances of the desktop app for different accounts, you can
