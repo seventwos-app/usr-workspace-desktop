@@ -1,4 +1,4 @@
-# Contributing code to Element Web
+# Contributing code to Seventwos Workspace for Desktop
 
 Everyone is welcome to contribute code to Element Web, provided that they are willing to license their contributions to Element under a [Contributor License Agreement](https://cla-assistant.io/element-hq/element-web) (CLA). This ensures that their contribution will be made available under an OSI-approved open-source license, currently licensed under Affero General Public License v3 (AGPLv3) or General Public License v3 (GPLv3) at your choice.
 

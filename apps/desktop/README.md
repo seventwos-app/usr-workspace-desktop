@@ -1,8 +1,10 @@
 ![Build](https://github.com/element-hq/element-web/actions/workflows/build_desktop_and_deploy.yaml/badge.svg)
 
-# Element Desktop
+# Seventwos Workspace for Desktop
 
-Element Desktop is a Matrix client for desktop platforms with Element Web at its core.
+This package is the Electron wrapper app for the Seventwos Workspace desktop client. It is inherited from
+Element Desktop and, at this stage, still packages the upstream Element Web webapp bundle. See the
+[repository README](../../README.md) for the Seventwos Workspace rebrand status and provenance.
 
 # First Steps
 
