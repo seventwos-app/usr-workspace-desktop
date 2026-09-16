@@ -1,0 +1,9 @@
+{
+    "appId": "org.seventwos.workspace.desktop.preview",
+    "name": "seventwos-workspace-desktop-preview",
+    "productName": "Seventwos Workspace Preview",
+    "description": "Seventwos Workspace desktop preview client",
+    "protocols": ["seventwos-workspace-preview"],
+    "linux.executableName": "seventwos-workspace-desktop-preview",
+    "linux.deb.name": "seventwos-workspace-desktop-preview"
+}

@@ -20,7 +20,7 @@ vi.mock("node:fs/promises", () => ({ default: memfs.promises }));
 
 vi.mock("electron", () => ({
     app: {
-        getPath: vi.fn().mockReturnValue("/Users/name/Library/Application Support/Element"),
+        getPath: vi.fn().mockReturnValue("/Users/name/Library/Application Support/Seventwos Workspace"),
         whenReady: (): Promise<void> => Promise.resolve(),
     },
     dialog: {
@@ -53,7 +53,7 @@ describe("loadConfig", () => {
 
     it("should ignore localConfigPath if does not exist", async () => {
         const config = await loadConfig("/invalid-path/custom-config.json");
-        expect(config.brand).toBe("Element");
+        expect(config.brand).toBe("Seventwos Workspace");
         expect(config.web_base_url).toBe("https://chat.org.com");
         expect(config.default_hs_url).toBe("https://matrix.org.com");
     });
@@ -71,7 +71,7 @@ describe("loadConfig", () => {
 
     it("should load default local config if exists", async () => {
         vol.fromJSON({
-            "/Users/name/Library/Application Support/Element/config.json": JSON.stringify({
+            "/Users/name/Library/Application Support/Seventwos Workspace/config.json": JSON.stringify({
                 brand: "foobar",
             }),
         });
@@ -88,7 +88,7 @@ describe("loadConfig", () => {
         });
 
         const config = await loadConfig("/home/custom-config.json");
-        expect(config.help_url).toBe("https://element.io/help");
+        expect(config.help_url).toBe("https://workspace.seventwos.org");
         expect(config.web_base_url).toBe("https://chat.org.com");
     });
 
@@ -102,8 +102,9 @@ describe("loadConfig", () => {
         );
 
         const config = await loadConfig(undefined);
-        expect(config.help_url).toBe("https://element.io/help");
-        expect(config.web_base_url).toBe("https://app.element.io/");
+        expect(config.help_url).toBe("https://workspace.seventwos.org");
+        expect(config.web_base_url).toBe("https://workspace.seventwos.org");
+        expect(config.enable_auto_update).toBeUndefined();
     });
 
     it("should handle key conflicts around default homeserver config", async () => {
@@ -132,7 +133,7 @@ describe("loadConfig", () => {
         );
 
         const config = await loadConfig("/home/custom-config.json");
-        expect(config.help_url).toBe("https://element.io/help");
+        expect(config.help_url).toBe("https://workspace.seventwos.org");
         expect(config.web_base_url).toBe("https://chat.org.com");
         expect(config.modules).toStrictEqual(["/webapp/modules/banner", "module2"]);
     });
@@ -146,8 +147,9 @@ describe("loadConfig", () => {
         expect(dialog.showMessageBox).toHaveBeenCalledWith({
             detail: "Unexpected token 'N', \"NOT_JSON\" is not valid JSON",
             message:
-                "Your custom Element configuration contains invalid JSON. Please correct the problem and reopen Element.",
-            title: "Your Element is misconfigured",
+                "Your custom Seventwos Workspace configuration contains invalid JSON. " +
+                "Please correct the problem and reopen Seventwos Workspace.",
+            title: "Your Seventwos Workspace is misconfigured",
             type: "error",
         });
     });

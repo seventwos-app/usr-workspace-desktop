@@ -66,7 +66,7 @@ type Writable<T> = NonNullable<
 >;
 
 // Load the default variant as a base configuration
-const DEFAULT_VARIANT = path.join("element.io", "release", "build.json");
+const DEFAULT_VARIANT = path.join("seventwos.org", "release", "build.json");
 let variant: Variant = JSON.parse(fs.readFileSync(DEFAULT_VARIANT, "utf8"));
 
 /**
@@ -141,7 +141,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         target: ["tar.gz", "deb"],
         category: "Network;InstantMessaging;Chat",
         icon: "icon.png",
-        executableName: variant.name, // element-desktop or element-desktop-nightly
+        executableName: variant.name,
     },
     deb: {
         packageCategory: "net",
@@ -158,7 +158,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             "libasound2",
             "libgbm1",
         ],
-        recommends: ["libsqlcipher0", "element-io-archive-keyring"],
+        recommends: ["libsqlcipher0"],
         fpm: ["--deb-pre-depends", "libc6 (>= 2.35)"],
     },
     mac: {
@@ -202,9 +202,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             await fsp.access(path.join(context.appDir, "webapp.asar"), fs.constants.F_OK);
         } catch (err) {
             console.error("The webapp.asar archive is missing. Building without a webapp is fruitless.");
-            console.log(
-                "RTFM https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#fetching-element.",
-            );
+            console.log("See apps/desktop/README.md#providing-the-upstream-web-bundle.");
             throw err;
         }
         return true; // Continue build

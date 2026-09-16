@@ -1,0 +1,12 @@
+{
+    "brand": "Seventwos Workspace",
+    "web_base_url": "https://workspace.seventwos.org",
+    "help_url": "https://workspace.seventwos.org",
+    "update_base_url": "https://workspace.seventwos.org/desktop/update/",
+    "enable_auto_update": false,
+    "integrations_widgets_urls": [],
+    "features": {
+        "feature_video_rooms": false,
+        "feature_element_call_video_rooms": false
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "appId": "org.seventwos.workspace.desktop",
+    "name": "seventwos-workspace-desktop",
+    "productName": "Seventwos Workspace",
+    "description": "Seventwos Workspace desktop client",
+    "protocols": ["seventwos-workspace"],
+    "linux.executableName": "seventwos-workspace-desktop",
+    "linux.deb.name": "seventwos-workspace-desktop"
+}

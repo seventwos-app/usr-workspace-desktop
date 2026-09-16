@@ -8,5 +8,5 @@ sleep 2
 
 export DISPLAY=:99
 
-PLAYWRIGHT_HTML_OPEN=never ELEMENT_DESKTOP_EXECUTABLE="./dist/linux-unpacked/element-desktop" \
+PLAYWRIGHT_HTML_OPEN=never ELEMENT_DESKTOP_EXECUTABLE="./dist/linux-unpacked/seventwos-workspace-desktop" \
   exec pnpm -C apps/desktop exec playwright test --update-snapshots --reporter line,html "$1"
