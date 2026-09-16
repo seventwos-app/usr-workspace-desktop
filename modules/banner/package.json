@@ -4,7 +4,7 @@
     "version": "2.1.0",
     "type": "module",
     "main": "lib/index.js",
-    "license": "SEE LICENSE IN README.md",
+    "license": "AGPL-3.0-only",
     "scripts": {
         "build": "nx build",
         "lint:types": "nx lint:types"

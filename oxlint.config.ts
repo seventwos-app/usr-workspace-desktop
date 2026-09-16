@@ -1,7 +1,7 @@
 /*
 Copyright 2026 Element Creations Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only
 Please see LICENSE in the repository root for full details.
 */
 
@@ -183,7 +183,7 @@ export default defineConfig({
 
         "element-call/copyright-header": [
             "error",
-            "/*\nCopyright %%CURRENT_YEAR%% Element Creations Ltd.\n\nSPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial\nPlease see LICENSE in the repository root for full details.\n*/\n\n",
+            "/*\nCopyright %%CURRENT_YEAR%% Element Creations Ltd.\n\nSPDX-License-Identifier: AGPL-3.0-only\nPlease see LICENSE in the repository root for full details.\n*/\n\n",
         ],
 
         // Allow the use of underscore to show args are not used.

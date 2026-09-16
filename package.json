@@ -7,7 +7,7 @@
         "type": "git",
         "url": "https://github.com/element-hq/element-web"
     },
-    "license": "SEE LICENSE IN README.md",
+    "license": "AGPL-3.0-only",
     "type": "module",
     "scripts": {
         "i18n": "pnpm -r i18n",
