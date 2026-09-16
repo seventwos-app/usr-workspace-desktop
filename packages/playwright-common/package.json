@@ -2,7 +2,7 @@
     "name": "@element-hq/element-web-playwright-common",
     "type": "module",
     "version": "6.2.0",
-    "license": "SEE LICENSE IN README.md",
+    "license": "AGPL-3.0-only",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/element-hq/element-web.git",

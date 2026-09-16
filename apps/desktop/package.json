@@ -13,7 +13,7 @@
         "type": "git",
         "url": "https://github.com/seventwos-app/usr-workspace-desktop"
     },
-    "license": "SEE LICENSE IN README.md",
+    "license": "AGPL-3.0-only",
     "type": "module",
     "files": [],
     "engines": {

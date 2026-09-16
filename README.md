@@ -28,7 +28,7 @@ Replacing the inherited web bundle with a Seventwos-authored bundle remains futu
 
 This repository is in transition from its Element Web foundation to a separately authored Seventwos application layer.
 
-The current code includes inherited Element Web and Element Desktop code, branding, and configuration. That inherited code remains subject to Element's licence terms and must not be represented as an independent Seventwos implementation. The transition will replace the inherited application layer with Seventwos code while retaining the desktop client architecture.
+The current code includes inherited Element Web and Element Desktop code, branding, and configuration. This fork redistributes that code under the GNU Affero General Public License v3 and must not be represented as an independently authored Seventwos implementation. The transition will replace the inherited application layer with Seventwos code while retaining the desktop client architecture.
 
 ## Architecture
 
@@ -51,7 +51,7 @@ Changes should make the transition from inherited application code explicit and 
 
 ## Provenance and licence
 
-The current codebase is derived from Element Web, which is multi-licensed under the GNU Affero General Public License v3, the GNU General Public License v3, or a paid Element Commercial License.
+The current codebase is derived from Element Web. Seventwos distributes this fork under the GNU Affero General Public License v3 only.
 
 Copyright (c) 2014 - 2017 OpenMarket Ltd.
 
@@ -59,6 +59,8 @@ Copyright (c) 2017 Vector Creations Ltd.
 
 Copyright (c) 2017 - 2025 New Vector Ltd.
 
-See [LICENSE-AGPL-3.0](LICENSE-AGPL-3.0), [LICENSE-GPL-3.0](LICENSE-GPL-3.0), and [LICENSE-COMMERCIAL](LICENSE-COMMERCIAL) for the terms that apply to inherited code.
+See [LICENSE-AGPL-3.0](LICENSE-AGPL-3.0) for the terms that apply to the repository-owned code. Third-party dependencies remain under their respective licences.
 
-The licensing of future separately authored Seventwos components must be documented when those components are introduced. Their inclusion does not alter the licence obligations of inherited Element Web code.
+Seventwos relies on the AGPL-3.0-only licensing option for this fork's use and distribution. When Seventwos modifies and distributes the software, or makes a modified version available for users to interact with over a network, the corresponding source must be offered as required by the AGPL.
+
+Future separately authored Seventwos components added to this repository must use AGPL-3.0-only unless they are clearly identified third-party dependencies under compatible terms.
