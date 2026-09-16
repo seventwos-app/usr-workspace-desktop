@@ -126,15 +126,6 @@ export default withMermaid({
                 ],
             },
             {
-                text: "Contribution",
-                items: [
-                    { text: "Choosing an issue", link: "/choosing-an-issue" },
-                    { text: "Translation", link: "/translating" },
-                    { text: "Netlify builds", link: "/pr-previews" },
-                    { text: "Code review", link: "/review" },
-                ],
-            },
-            {
                 text: "Development",
                 items: [
                     { text: "App load order", link: "/app-load.md" },
