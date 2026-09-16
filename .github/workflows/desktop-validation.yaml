@@ -1,6 +1,9 @@
 name: Desktop Validation
 
 on:
+    push:
+        branches:
+            - "release/**"
     pull_request:
         branches:
             - develop
