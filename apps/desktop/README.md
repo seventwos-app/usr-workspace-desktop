@@ -154,7 +154,6 @@ Copyright (c) 2017 Vector Creations Ltd
 
 Copyright (c) 2017-2025 New Vector Ltd
 
-Seventwos distributes this fork under the GNU Affero General Public License v3 only.
-See [LICENSE-AGPL-3.0](../../LICENSE-AGPL-3.0) for the applicable terms.
+This application is maintained as Seventwos Workspace for Desktop. We license the repository-owned code under the GNU Affero General Public License v3 only. See [LICENSE-AGPL-3.0](../../LICENSE-AGPL-3.0) for the applicable terms.
 
 Unless required by applicable law or agreed to in writing, software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
