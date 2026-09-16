@@ -1,6 +1,6 @@
 # @element-hq/element-web-module-api
 
-API surface for extending Element Web in a safe & predictable way.
+Internal API surface used to extend the web application bundled by Seventwos Workspace for Desktop, in a safe & predictable way. This package is inherited from Element Web and is maintained here for use within this monorepo's modules.
 
 ## Using the API
 
@@ -54,7 +54,7 @@ class ExampleModule implements Module {
 
 The API is versioned using semver, with the major version incremented for breaking changes.
 
-To carry out a release, see the documentation at [`../RELEASING.md`](../RELEASING.md).
+This package is private and internal to this monorepo (see [`../RELEASING.md`](../RELEASING.md)); it is not published to any registry.
 
 ## Copyright & License
 

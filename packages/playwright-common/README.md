@@ -1,6 +1,6 @@
 # @element-hq/element-web-playwright-common
 
-Set of Playwright & testcontainers utilities to make it easier to write tests for Element Web, Element Web Modules & Element Desktop.
+Internal set of Playwright & testcontainers utilities used to write tests for Seventwos Workspace for Desktop and its modules. This package is inherited from Element Web and is maintained here for use within this monorepo only.
 
 The main export includes a number of fixtures and custom assertions as documented in JSDoc.
 
@@ -16,7 +16,7 @@ There are a number of utils available in the `lib/utils` export.
 
 The API is versioned using semver, with the major version incremented for breaking changes.
 
-To carry out a release, see the documentation at [`../RELEASING.md`](../RELEASING.md).
+This package is private and internal to this monorepo (see [`../RELEASING.md`](../RELEASING.md)); it is not published to any registry.
 
 ## Copyright & License
 

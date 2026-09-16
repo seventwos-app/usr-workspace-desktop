@@ -1,6 +1,6 @@
 # @element-hq/element-web-module-restricted-guests
 
-Restricted Guests module for Element Web.
+Restricted Guests module for Seventwos Workspace for Desktop, inherited from Element Web.
 
 Supports the following configuration options under the configuration key `io.element.element-web-modules.restricted-guests`:
 

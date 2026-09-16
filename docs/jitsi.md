@@ -1,7 +1,9 @@
-# Jitsi in Element
+# Jitsi in Seventwos Workspace for Desktop
 
-Element uses [Jitsi](https://jitsi.org/) for conference calls, which provides options for
-self-hosting your own server and supports most major platforms.
+The bundled web app (inherited from Element Web) uses [Jitsi](https://jitsi.org/) for conference calls, which provides
+options for self-hosting your own server and supports most major platforms. This repository does not operate a Jitsi
+deployment; the checked-in Seventwos configs intentionally omit a call endpoint, so calling is not usable until an
+operator configures one, per the guidance below.
 
 1:1 calls, or calls between you and one other person, do not use Jitsi. Instead, those
 calls work directly between clients or via TURN servers configured on the respective
@@ -14,17 +16,16 @@ will add a Jitsi widget which allows anyone in the room to join.
 Integration managers (available through the 4 squares in the top right of the room) may
 provide their own approaches for adding Jitsi widgets.
 
-## Configuring Element to use your self-hosted Jitsi server
+## Configuring the app to use your self-hosted Jitsi server
 
-You can host your own Jitsi server to use with Element. It's usually advisable to use a recent
-version of Jitsi. In particular, versions older than around 6826 will cause problems with
-Element 1.9.10 or newer.
+You can host your own Jitsi server to use with this app. It's usually advisable to use a recent
+version of Jitsi, since older versions may cause compatibility problems with newer app releases.
 
-Element will use the Jitsi server that is embedded in the widget, even if it is not the
+The app will use the Jitsi server that is embedded in the widget, even if it is not the
 one you configured. This is because conference calls must be held on a single Jitsi
 server and cannot be split over multiple servers.
 
-However, you can configure Element to _start_ a conference with your Jitsi server by adding
+However, you can configure the app to _start_ a conference with your Jitsi server by adding
 to your [config](./config.md) the following:
 
 ```json
@@ -35,17 +36,19 @@ to your [config](./config.md) the following:
 }
 ```
 
-Element's default is `meet.element.io` (a free service offered by Element). `meet.jit.si`
-is an instance hosted by Jitsi themselves and is also free to use.
+The unmodified upstream bundle's default is `meet.element.io` (a free service operated by Element); this fork does not use
+that default and does not ship a `preferred_domain`, so calling will not work until you set one. `meet.jit.si` is an
+instance hosted by Jitsi themselves and is also free to use, but self-hosting your own Jitsi server gives you full
+control over the service.
 
-Once you've applied the config change, refresh Element and press the call button. This
+Once you've applied the config change, restart the app and press the call button. This
 should start a new conference on your Jitsi server.
 
-**Note**: The widget URL will point to a `jitsi.html` page hosted by Element. The Jitsi
+**Note**: The widget URL will point to a local `jitsi.html` page served by the bundled web app. The Jitsi
 domain will appear later in the URL as a configuration parameter.
 
 **Hint**: If you want everyone on your homeserver to use the same Jitsi server by
-default, and you are using element-web 1.6 or newer, set the following on your homeserver's
+default, set the following on your homeserver's
 `/.well-known/matrix/client` config:
 
 ```json
@@ -55,21 +58,6 @@ default, and you are using element-web 1.6 or newer, set the following on your h
     }
 }
 ```
-
-## Element Android
-
-Element Android (1.0.5+) supports custom Jitsi domains, similar to Element Web above.
-
-1:1 calls, or calls between you and one other person, do not use Jitsi. Instead, those
-calls work directly between clients or via TURN servers configured on the respective
-homeservers.
-
-For rooms with more than 2 joined members, when creating a Jitsi conference via call/video buttons of the toolbar (not via integration manager), Element Android will create a widget using the [wrapper](https://github.com/element-hq/element-web/blob/develop/docs/jitsi-dev.md) hosted on `app.element.io`.
-The domain used is the one specified by the `/.well-known/matrix/client` endpoint, and if not present it uses the fallback defined in `config.json` (meet.element.io)
-
-For active Jitsi widgets in the room, a native Jitsi widget UI is created and points to the instance specified in the `domain` key of the widget content data.
-
-Element Android manages allowed native widgets permissions a bit differently than web widgets (as the data shared are different and never shared with the widget URL). For Jitsi widgets, permissions are requested only once per domain (consent saved in account data).
 
 # Jitsi Wrapper
 
@@ -104,7 +92,8 @@ _Hash/fragment (formatted as a query string)_:
   be null.
 
 The react-sdk will assume that `jitsi.html` is at the path of wherever it is currently
-being served. For example, `https://develop.element.io/jitsi.html` or `vector://webapp/jitsi.html`.
+being served, e.g. `vector://vector/webapp/jitsi.html` for this desktop app, or
+`https://your-deployment.example.org/jitsi.html` for a web deployment.
 
 The `jitsi.html` wrapper can use the react-sdk's `WidgetApi` to communicate, making
 it easier to actually implement the feature.

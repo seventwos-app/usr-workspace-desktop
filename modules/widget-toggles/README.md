@@ -1,6 +1,7 @@
 # Widget Toggles Module
 
-Adds room header buttons for widgets in the room.
+Widget toggles module for Seventwos Workspace for Desktop, inherited from Element Web. Adds room
+header buttons for widgets in the room.
 
 This module needs to be configured to control what widget types get buttons added for them.
 The following config snippet enables the module and configures it to add buttons for both

@@ -26,7 +26,7 @@ function resolveWindowCloseBehavior(opts: {
  *
  * On macOS, closing the window (⌘W or the red traffic-light) is treated the same as hiding the
  * whole app (⌘H): the *application* is hidden rather than just the window, so another app becomes
- * active and the user is not left with Element frontmost showing an empty menu bar and no window
+ * active and the user is not left with this app frontmost showing an empty menu bar and no window
  * — the "limbo state" reported in https://github.com/element-hq/element-web/issues/32267.
  *
  * Elsewhere, when a tray icon is present, closing minimises to the tray (the window is hidden).

@@ -13,7 +13,7 @@ import * as tar from "tar";
 import * as asar from "@electron/asar";
 import { promises as stream } from "node:stream";
 
-import riotDesktopPackageJson from "../package.json" with { type: "json" };
+import desktopPackageJson from "../package.json" with { type: "json" };
 import { setPackageVersion } from "./set-version.ts";
 
 const PUB_KEY_URL = "https://packages.riot.im/element-release-key.asc";
@@ -89,7 +89,7 @@ async function main(): Promise<number | undefined> {
 
     if (targetVersion === undefined) {
         console.error("An explicit upstream release tag or HTTPS bundle URL is required.");
-        console.error(`For the matching upstream release, pass v${riotDesktopPackageJson.version}.`);
+        console.error(`For the matching upstream release, pass v${desktopPackageJson.version}.`);
         return 1;
     }
 

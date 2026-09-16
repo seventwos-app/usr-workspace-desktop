@@ -2,13 +2,16 @@
     "name": "@element-hq/element-web-playwright-common",
     "type": "module",
     "version": "6.2.0",
+    "private": true,
     "license": "AGPL-3.0-only",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/element-hq/element-web.git",
+        "url": "https://github.com/seventwos-app/usr-workspace-desktop",
         "directory": "packages/playwright-common"
     },
-    "author": "element-hq",
+    "author": {
+        "name": "Seventwos"
+    },
     "engines": {
         "node": ">=20.0.0"
     },

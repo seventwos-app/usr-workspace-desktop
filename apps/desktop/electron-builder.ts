@@ -235,7 +235,7 @@ if (process.env.ED_SIGNTOOL_SUBJECT_NAME && process.env.ED_SIGNTOOL_THUMBPRINT) 
 
 if (os.platform() === "linux") {
     // Electron crashes on debian if there's a space in the path.
-    // https://github.com/vector-im/element-web/issues/13171
+    // https://github.com/element-hq/element-web/issues/13171
     config.extraMetadata.productName = config.extraMetadata.productName.replace(/ /g, "-");
 
     /**

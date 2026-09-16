@@ -1,10 +1,11 @@
 # @element-hq/element-web-shared-utils
 
-Standalone, utilities shared by Element projects.
+Internal, standalone utilities shared across Seventwos Workspace for Desktop packages. This package is
+inherited from Element Web and is not published or maintained as a standalone public library by this
+fork.
 
 The package provides string-based HTML sanitization and URL validation for
-untrusted Matrix-compatible formatted content. It is designed to work in
-Element Web as well as in external JavaScript and TypeScript packages.
+untrusted Matrix-compatible formatted content.
 
 ## Usage
 
@@ -35,6 +36,6 @@ Copyright (c) 2026 Element Creations Ltd.
 This software is licensed under the terms described in the repository license
 files.
 
-## Publish a new version
+## Versioning
 
-To carry out a release, see the documentation at [`../RELEASING.md`](../RELEASING.md).
+This package is private and internal to this monorepo (see [`../RELEASING.md`](../RELEASING.md)); it is not published to any registry.

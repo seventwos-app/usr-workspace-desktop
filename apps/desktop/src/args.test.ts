@@ -213,7 +213,21 @@ describe("getArgs", () => {
             });
         });
 
-        it("should handle ELEMENT_PROFILE_DIR", () => {
+        it("should handle SEVENTWOS_WORKSPACE_PROFILE_DIR", () => {
+            vi.spyOn(process, "env", "get").mockReturnValue({
+                SEVENTWOS_WORKSPACE_PROFILE_DIR: "/mnt/foo/profile",
+            });
+            const args = run();
+            expect(args).toEqual({
+                userDataPath: "/mnt/foo/profile",
+                devtools: false,
+                update: true,
+                hidden: false,
+                positional: ["/path/to/app"],
+            });
+        });
+
+        it("should handle legacy ELEMENT_PROFILE_DIR alias", () => {
             vi.spyOn(process, "env", "get").mockReturnValue({
                 ELEMENT_PROFILE_DIR: "/mnt/foo/profile",
             });
@@ -227,7 +241,22 @@ describe("getArgs", () => {
             });
         });
 
-        it("should prefer deeplink over ELEMENT_PROFILE_DIR", () => {
+        it("should prefer SEVENTWOS_WORKSPACE_PROFILE_DIR over legacy ELEMENT_PROFILE_DIR alias", () => {
+            vi.spyOn(process, "env", "get").mockReturnValue({
+                SEVENTWOS_WORKSPACE_PROFILE_DIR: "/mnt/foo/new-profile",
+                ELEMENT_PROFILE_DIR: "/mnt/foo/old-profile",
+            });
+            const args = run();
+            expect(args).toEqual({
+                userDataPath: "/mnt/foo/new-profile",
+                devtools: false,
+                update: true,
+                hidden: false,
+                positional: ["/path/to/app"],
+            });
+        });
+
+        it("should prefer deeplink over SEVENTWOS_WORKSPACE_PROFILE_DIR / ELEMENT_PROFILE_DIR", () => {
             vi.spyOn(process, "argv", "get").mockReturnValue(["/path/to/app", "protocol:/#state=foo&code=bar"]);
             vi.spyOn(process, "env", "get").mockReturnValue({
                 ELEMENT_PROFILE_DIR: "/mnt/foo/profile",
@@ -247,7 +276,21 @@ describe("getArgs", () => {
             });
         });
 
-        it("should combine ELEMENT_PROFILE_DIR with '--profile'", () => {
+        it("should combine SEVENTWOS_WORKSPACE_PROFILE_DIR with '--profile'", () => {
+            vi.spyOn(process, "env", "get").mockReturnValue({
+                SEVENTWOS_WORKSPACE_PROFILE_DIR: "/mnt/foo/profile",
+            });
+            const args = run("--profile", "play");
+            expect(args).toEqual({
+                userDataPath: "/mnt/foo/profile-play",
+                devtools: false,
+                update: true,
+                hidden: false,
+                positional: ["/path/to/app"],
+            });
+        });
+
+        it("should combine legacy ELEMENT_PROFILE_DIR alias with '--profile'", () => {
             vi.spyOn(process, "env", "get").mockReturnValue({
                 ELEMENT_PROFILE_DIR: "/mnt/foo/profile",
             });
@@ -261,6 +304,9 @@ describe("getArgs", () => {
             });
         });
 
+        // This app has been rebranded twice over its history (Riot -> Element -> Seventwos Workspace).
+        // Real installs from either earlier era may still have their profile data sitting under those
+        // literal legacy directory names, so migration must keep working from both historical sources.
         it("should handle old Riot data dirs", () => {
             vol.fromJSON({
                 "/Users/name/Library/Application Support/Riot/IndexedDB": "This is a real IDB. I promise.",
@@ -269,6 +315,37 @@ describe("getArgs", () => {
             const args = run();
             expect(args).toEqual({
                 userDataPath: "/Users/name/Library/Application Support/Riot",
+                devtools: false,
+                update: true,
+                hidden: false,
+                positional: ["/path/to/app"],
+            });
+        });
+
+        it("should handle old Element data dirs", () => {
+            vol.fromJSON({
+                "/Users/name/Library/Application Support/Element/IndexedDB": "This is a real IDB. I promise.",
+            });
+
+            const args = run();
+            expect(args).toEqual({
+                userDataPath: "/Users/name/Library/Application Support/Element",
+                devtools: false,
+                update: true,
+                hidden: false,
+                positional: ["/path/to/app"],
+            });
+        });
+
+        it("should prefer old Element data dir over even older Riot data dir", () => {
+            vol.fromJSON({
+                "/Users/name/Library/Application Support/Element/IndexedDB": "This is a real IDB. I promise.",
+                "/Users/name/Library/Application Support/Riot/IndexedDB": "This is a real IDB. I promise.",
+            });
+
+            const args = run();
+            expect(args).toEqual({
+                userDataPath: "/Users/name/Library/Application Support/Element",
                 devtools: false,
                 update: true,
                 hidden: false,
@@ -290,7 +367,22 @@ describe("getArgs", () => {
             });
         });
 
-        it("should handle ELEMENT_DESKTOP_CONFIG_JSON", () => {
+        it("should handle SEVENTWOS_WORKSPACE_DESKTOP_CONFIG_JSON", () => {
+            vi.spyOn(process, "env", "get").mockReturnValue({
+                SEVENTWOS_WORKSPACE_DESKTOP_CONFIG_JSON: "/path/for/config.json",
+            });
+            const args = run();
+            expect(args).toEqual({
+                userDataPath: "/Users/name/Library/Application Support/Element",
+                devtools: false,
+                update: true,
+                hidden: false,
+                positional: ["/path/to/app"],
+                localConfigPath: "/path/for/config.json",
+            });
+        });
+
+        it("should handle legacy ELEMENT_DESKTOP_CONFIG_JSON alias", () => {
             vi.spyOn(process, "env", "get").mockReturnValue({
                 ELEMENT_DESKTOP_CONFIG_JSON: "/path/for/config.json",
             });
@@ -302,6 +394,22 @@ describe("getArgs", () => {
                 hidden: false,
                 positional: ["/path/to/app"],
                 localConfigPath: "/path/for/config.json",
+            });
+        });
+
+        it("should prefer SEVENTWOS_WORKSPACE_DESKTOP_CONFIG_JSON over legacy ELEMENT_DESKTOP_CONFIG_JSON alias", () => {
+            vi.spyOn(process, "env", "get").mockReturnValue({
+                SEVENTWOS_WORKSPACE_DESKTOP_CONFIG_JSON: "/path/for/new-config.json",
+                ELEMENT_DESKTOP_CONFIG_JSON: "/path/for/old-config.json",
+            });
+            const args = run();
+            expect(args).toEqual({
+                userDataPath: "/Users/name/Library/Application Support/Element",
+                devtools: false,
+                update: true,
+                hidden: false,
+                positional: ["/path/to/app"],
+                localConfigPath: "/path/for/new-config.json",
             });
         });
 

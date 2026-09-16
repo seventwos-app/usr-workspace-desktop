@@ -66,4 +66,4 @@ This is anywhere your data or business logic comes from. If your view model is a
 
 ### Example
 
-We started experimenting with MVVM in the redesigned memberlist, you can see the code [here](https://github.com/vector-im/element-web/blob/develop/src/components/views/rooms/MemberList/MemberListView.tsx).
+We started experimenting with MVVM in the redesigned memberlist, you can see the code [here](https://github.com/element-hq/element-web/blob/develop/src/components/views/rooms/MemberList/MemberListView.tsx).

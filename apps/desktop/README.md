@@ -41,7 +41,7 @@ Moving `develop` bundles and implicit version selection are rejected. Do not add
 
 TODO: List native pre-requisites
 
-Optionally, [build the native modules](https://github.com/element-hq/element-web/blob/develop/docs/native-node-modules.md),
+Optionally, [build the native modules](../../docs/native-node-modules.md),
 which include support for searching in encrypted rooms and secure storage. Skipping this step is fine, you just won't have those features.
 
 Then, run
@@ -134,7 +134,8 @@ In the paths above, `$NAME` is determined by the installed app. Legacy upstream 
 
 You may also specify a different path entirely for the `config.json` file by
 providing the `--config $YOUR_CONFIG_JSON_FILE` to the process, or via the
-`ELEMENT_DESKTOP_CONFIG_JSON` environment variable.
+`SEVENTWOS_WORKSPACE_DESKTOP_CONFIG_JSON` environment variable (the legacy
+`ELEMENT_DESKTOP_CONFIG_JSON` name is still recognised as a fallback for backwards compatibility).
 
 # Translations
 
@@ -154,6 +155,6 @@ Copyright (c) 2017 Vector Creations Ltd
 
 Copyright (c) 2017-2025 New Vector Ltd
 
-This application is maintained as Seventwos Workspace for Desktop. We license the repository-owned code under the GNU Affero General Public License v3 only. See [LICENSE-AGPL-3.0](../../LICENSE-AGPL-3.0) for the applicable terms.
+This application is maintained as Seventwos Workspace for Desktop. We license the repository-owned code under the GNU Affero General Public License v3 only. See [LICENSE-AGPL-3.0](https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/LICENSE-AGPL-3.0) for the applicable terms.
 
 Unless required by applicable law or agreed to in writing, software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.

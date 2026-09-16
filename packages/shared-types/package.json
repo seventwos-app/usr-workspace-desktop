@@ -3,8 +3,10 @@
     "type": "module",
     "version": "0.0.0",
     "private": true,
-    "description": "Shared types for Element Web & Desktop",
-    "author": "element-hq",
+    "description": "Shared TypeScript types used internally across Seventwos Workspace for Desktop packages (inherited from Element Web).",
+    "author": {
+        "name": "Seventwos"
+    },
     "license": "AGPL-3.0-only",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",

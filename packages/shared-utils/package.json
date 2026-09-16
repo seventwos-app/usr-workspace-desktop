@@ -2,13 +2,16 @@
     "name": "@element-hq/element-web-shared-utils",
     "type": "module",
     "version": "0.1.0",
-    "description": "Shared utilities for Element Web",
+    "private": true,
+    "description": "Shared utilities used internally to build Seventwos Workspace for Desktop (inherited from Element Web).",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/element-hq/element-web.git",
+        "url": "https://github.com/seventwos-app/usr-workspace-desktop",
         "directory": "packages/shared-utils"
     },
-    "author": "element-hq",
+    "author": {
+        "name": "Seventwos"
+    },
     "license": "AGPL-3.0-only",
     "engines": {
         "node": ">=20.0.0"

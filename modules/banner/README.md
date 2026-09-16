@@ -1,6 +1,6 @@
 # @element-hq/element-web-module-banner
 
-Banner module for Element Web.
+Banner module for Seventwos Workspace for Desktop, inherited from Element Web.
 Allows rendering a top bar with slide out left panel menu.
 
 Supports the following configuration options:

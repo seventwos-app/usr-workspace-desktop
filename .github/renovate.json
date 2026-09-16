@@ -1,6 +1,6 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["github>matrix-org/renovate-config-element-web"],
+    "extends": ["config:recommended"],
     "postUpdateOptions": ["pnpmDedupe"],
     "stopUpdatingLabel": "X-Blocked",
     "packageRules": [

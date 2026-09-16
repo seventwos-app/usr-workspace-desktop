@@ -10,7 +10,7 @@ modules from source to ensure we can trust the compiled output. In the future,
 we may offer a pre-compiled path for those who want to use these features in a
 custom build of Element without installing the various build tools required.
 
-The process is automated by [vector-im/element-builder](https://github.com/vector-im/element-builder)
+The process is automated by [element-hq/element-builder](https://github.com/element-hq/element-builder)
 when releasing.
 
 ## Use docker
@@ -33,13 +33,13 @@ pnpm link ./docker/.hak/hakModules/matrix-seshat
 
 ... and build the app with `pnpm build` or run it with `pnpm start`.
 
-(See also https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#docker.)
+(See also [`apps/desktop/README.md#docker`](../apps/desktop/README.md#docker).)
 
 ## Building
 
 Install the pre-requisites for your system:
 
-- [Windows pre-requisites](https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/windows-requirements.md)
+- [Windows pre-requisites](./windows-requirements.md)
 - Linux: TODO. Using the docker environment as above is recommended.
 - OS X: TODO
 
@@ -99,7 +99,7 @@ By including `SQLCIPHER_BUNDLED=1` in the build environment, the build scripts w
 link sqlcipher, including a static build of OpenSSL.
 
 More info can be found at https://github.com/matrix-org/seshat/issues/102
-and https://github.com/vector-im/element-web/issues/20926.
+and https://github.com/element-hq/element-web/issues/20926.
 
 ### Compiling for specific architectures
 

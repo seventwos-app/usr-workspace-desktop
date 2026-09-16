@@ -75,7 +75,7 @@ export default class ProtocolHandler {
         const parsed = new URL(url);
         // sanity check: we only register for the one protocol, so we shouldn't
         // be getting anything else unless the user is forcing a URL to open
-        // with the Element app.
+        // with this app.
         if (parsed.protocol !== `${this.protocol}:`) {
             console.log("Ignoring unexpected protocol: ", parsed.protocol);
             return false;

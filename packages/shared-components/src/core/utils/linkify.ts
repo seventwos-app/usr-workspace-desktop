@@ -149,7 +149,7 @@ export interface LinkedTextOptions {
 
 /**
  * Generates a linkifyjs options object that is reasonably paired down
- * to just the essentials required for an Element client.
+ * to just the essentials required for a Matrix chat client.
  *
  * @returns A `linkifyjs` `Opts` object. Used by `linkifyString` and `linkifyHtml
  * @see {@link linkifyHtml}

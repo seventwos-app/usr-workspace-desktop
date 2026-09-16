@@ -1,5 +1,25 @@
-_extends: matrix-org/matrix-js-sdk
+name-template: "Seventwos Workspace for Desktop v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+tag-prefix: v
 version-resolver:
     default: patch
-# Exclude modules releases
-tag-prefix: v
+categories:
+    - title: "🚀 Features"
+      labels:
+          - "T-Enhancement"
+    - title: "🐛 Bug Fixes"
+      labels:
+          - "T-Defect"
+    - title: "🧰 Maintenance"
+      labels:
+          - "Dependencies"
+          - "T-Task"
+exclude-labels:
+    - "X-Cannot-Reproduce"
+    - "X-Needs-Iteration"
+template: |
+    ## Changes
+
+    $CHANGES
+change-template: "- $TITLE (#$NUMBER)"
+no-changes-template: "- No changes"
