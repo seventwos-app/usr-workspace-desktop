@@ -1,46 +1,27 @@
-## Packaging nightlies
+## Packaging builds
 
-Element Desktop nightly builds are build automatically by the [Github Actions workflow](https://github.com/vector-im/element-web/blob/develop/.github/workflows/build_desktop_and_deploy.yaml).
-The schedule is currently set for once a day at 9am UTC. It will deploy to packages.element.io upon completion.
+Seventwos Workspace for Desktop artifacts are built by the
+[`build_desktop_and_deploy.yaml`](https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/.github/workflows/build_desktop_and_deploy.yaml)
+GitHub Actions workflow.
 
-## Triggering a manual nightly build
+This workflow is currently triggered manually (`workflow_dispatch`) rather than on a schedule. It takes
+the pinned upstream web bundle URL and SHA-256 digest as inputs (see the repository README for details
+on how the desktop app packages a pre-built web UI bundle rather than compiling one in this repository),
+and builds unsigned macOS, Windows, and Linux artifacts as selected via the workflow's inputs.
 
-Simply go to https://github.com/vector-im/element-web/actions/workflows/build_desktop_and_deploy.yaml
+### Triggering a manual build
+
+Go to the
+[`build_desktop_and_deploy.yaml`](https://github.com/seventwos-app/usr-workspace-desktop/actions/workflows/build_desktop_and_deploy.yaml)
+workflow page in this repository:
 
 1. Click `Run workflow`
-1. Feel free to make changes to the checkboxes depending on the circumstances
+1. Provide the pinned upstream web bundle URL and SHA-256 digest, and the desired variant/platform inputs
 1. Click the green `Run workflow`
 
-## Packaging releases
+### Signing and distribution
 
-The packaging is kicked off automagically for you when a Github Release for Element Web is published.
-
-### More detail on the github actions
-
-We moved to Github Actions for the following reasons:
-
-1. Removing single point of failure
-2. Improving reliability
-3. Unblocking the packaging on a single individual
-4. Improving parallelism
-
-The Windows builds are signed by SSL.com using their Cloud Key Adapter for eSigner.
-This allows us to use Microsoft's signtool to interface with eSigner and send them a hash of the exe along with
-credentials in exchange for a signed certificate which we attach onto all the relevant files.
-
-The Apple builds are signed using standard code signing means and then notarised to appease GateKeeper.
-
-The Linux builds are distributed via a signed reprepro repository.
-
-The packages.element.io site is a public Cloudflare R2 bucket which is deployed to solely from Github Actions.
-The main bucket in R2 is `packages-element-io` which is a direct mapping of packages.element.io,
-we have a workflow which generates the index.html files there to imitate a public index which Cloudflare does not currently support.
-The reprepro database lives in `packages-element-io-db`.
-There is an additional pair of buckets of same name but appended with `-test` which can be used for testing,
-these land on https://packages-element-io-test.element.io/.
-
-### Debian/Ubuntu Distributions
-
-We used to add a new distribution to match each Debian and Ubuntu release. As of April 2020, we have created a `default` distribution that everyone can use (since the packages have never differed by distribution anyway).
-
-The distribution configuration lives in https://github.com/vector-im/packages.element.io/blob/master/debian/conf/distributions as a canonical source.
+This repository's build workflow currently produces unsigned artifacts only; it does not sign, notarise,
+or publish artifacts to any package repository or distribution endpoint. Setting up code signing (macOS
+notarisation, Windows signing, Linux repository distribution) and an automated release/deployment
+pipeline remains future work for this fork.

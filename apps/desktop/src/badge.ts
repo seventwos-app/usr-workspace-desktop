@@ -38,7 +38,7 @@ if (process.platform === "win32") {
 } else {
     // only set badgeCount on Mac/Linux, the docs say that only those platforms support it but turns out Electron
     // has some Windows support too, and in some Windows environments this leads to two badges rendering atop
-    // each other. See https://github.com/vector-im/element-web/issues/16942
+    // each other. See https://github.com/element-hq/element-web/issues/16942
     ipcMain.on("setBadgeCount", function (_ev: IpcMainEvent, count: number): void {
         if (count === 0) {
             // Flash frame is set to true in ipc.ts "loudNotification"

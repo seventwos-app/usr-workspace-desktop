@@ -114,7 +114,7 @@ function safeCounterpartTranslate(text: string, variables?: IVariables): { trans
         interpolate: boolean;
     } = { ...variables, interpolate: false };
 
-    // Horrible hack to avoid https://github.com/vector-im/element-web/issues/4191
+    // Horrible hack to avoid https://github.com/element-hq/element-web/issues/4191
     // The interpolation library that counterpart uses does not support undefined/null
     // values and instead will throw an error. This is a problem since everywhere else
     // in JS land passing undefined/null will simply stringify instead, and when converting

@@ -37,7 +37,7 @@ This is anywhere your data or business logic comes from. If your view model is a
 
 #### View
 
-1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/packages/shared-components). Develop it in storybook!
+1. Located in [`shared-components`](https://github.com/seventwos-app/usr-workspace-desktop/tree/develop/packages/shared-components). Develop it in storybook!
 2. Views are simple react components (eg: `FooView`) with very little state and logic.
 3. Views must call `useViewModel` hook with the corresponding view model passed in as argument. This allows the view to re-render when something has changed in the view model. This entire mechanism is powered by [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore).
 4. Views should define the interface of the view model (see example below).
@@ -59,7 +59,7 @@ interface FooViewActions {
 }
 
 // ViewModel is an object (usually a class) that implements both the interfaces listed above.
-// https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/ViewModel.ts
+// https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/packages/shared-components/src/core/viewmodel/ViewModel.ts
 export type FooViewModel = ViewModel<FooViewSnapshot, FooViewActions>;
 
 interface FooViewProps {
@@ -89,10 +89,10 @@ export function FooView({ vm }: FooViewProps): JSX.Element {
 
 #### View Model
 
-1. A View model is a class extending [`BaseViewModel`](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/base/BaseViewModel.ts).
+1. A View model is a class extending [`BaseViewModel`](https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/packages/shared-components/src/core/viewmodel/BaseViewModel.ts).
 2. Implements the interface defined in the view (e.g `FooViewModel` in the example above).
 3. View models define a snapshot type that defines the data the view will consume. The snapshot is immutable and can only be changed by calling `this.snapshot.set(...)` or `this.snapshot.merge(...)` in the view model. This will trigger a re-render in the view.
-4. Call [`this.snapshot.merge(...)`](https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/viewmodel/Snapshot.ts#L32) to only update part of the snapshot. `merge(...)` already skips emitting when the merged fields are unchanged, so avoid extra equality guards that only duplicate that check.
+4. Call [`this.snapshot.merge(...)`](https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/packages/shared-components/src/core/viewmodel/Snapshot.ts#L33) to only update part of the snapshot. `merge(...)` already skips emitting when the merged fields are unchanged, so avoid extra equality guards that only duplicate that check.
 5. Avoid recomputing the entire snapshot when you only need to update a single field. For performance reasons, only recompute the fields that have actually changed. For example, if only `title` has changed, call `this.snapshot.merge({ title: newTitle })` rather than rebuilding the full snapshot object with all fields recomputed.
 6. View models can have props which are passed in the constructor. Props are usually used to pass in dependencies (eg: stores, sdk, etc) that the view model needs to do its work. They can also be used to pass in initial values for the snapshot.
 

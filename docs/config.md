@@ -13,12 +13,17 @@ Element will attempt to load first `config.$domain.json` and if it fails `config
 configuration options depending on if you're hitting e.g. `app1.example.com` or `app2.example.com`. Configs are not mixed
 in any way, it either entirely uses the domain config, or entirely uses `config.json`.
 
-The possible configuration options are described here. If you run into issues, please visit
-[#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) on Matrix.
+The possible configuration options are described here. If you run into issues, please open an issue in
+this repository.
 
-For a good example of a production-tuned config, see https://app.element.io/config.json
-
-For an example of a development/beta-tuned config, see https://develop.element.io/config.json
+This repository does not operate any Element-hosted instance (there is no `app.element.io` or
+`develop.element.io` equivalent for this fork). For examples of configs actually used to build this
+product, see
+[`apps/desktop/seventwos.org/release/config.json`](../apps/desktop/seventwos.org/release/config.json) and
+[`apps/desktop/seventwos.org/preview/config.json`](../apps/desktop/seventwos.org/preview/config.json). Both
+intentionally omit homeserver, identity server, telemetry, rageshake, maps, call, and Scalar integration
+endpoints; operators must add their own endpoints explicitly rather than relying on the upstream bundle's
+built-in Element-hosted defaults described below.
 
 After changing the config, the app will need to be reloaded. For web browsers this is a simple page refresh, however
 for the desktop app the application will need to be exited fully (including via the task tray) and re-started.
@@ -132,8 +137,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
 2. `default_device_display_name`: Optional public name for devices created by login and registration, instead of the default
    templated string. Note that this option does not support templating, currently.
 3. `brand`: Optional name for the app. Defaults to `Element`. This is used throughout the application in various strings/locations.
-4. `permalink_prefix`: An optional URL pointing to an Element Web deployment. For example, `https://app.element.io`. This will
-   change all permalinks (via the "Share" menus) to point at the Element Web deployment rather than `matrix.to`.
+4. `permalink_prefix`: An optional URL pointing to a web deployment of this app. For example, `https://your-deployment.example.org`. This will
+   change all permalinks (via the "Share" menus) to point at that deployment rather than `matrix.to`.
 5. `desktop_builds`: Optional. Where the desktop builds for the application are, if available. This is explained in more detail
    down below.
 6. `mobile_builds`: Optional. Like `desktop_builds`, except for the mobile apps. Also described in more detail down below.
@@ -145,8 +150,10 @@ complete re-branding/private labeling, a more personalised experience can be ach
     2. `element-classic`: Element Classic Android/iOS.
     3. `element-pro`: Element Pro Android/iOS.
 9. `update_base_url`: For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory
-   containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/`
-   in production.
+   containing `macos` and `win32` directories, with the update packages within. The unmodified upstream bundle defaults to
+   `https://packages.element.io/desktop/update/` in production, but this is an Element-hosted service this fork does not use. The
+   checked-in Seventwos configs set an explicit `update_base_url` (currently with `enable_auto_update: false` until that service is
+   validated) and operators should always set their own rather than relying on the upstream default.
 10. `map_style_url`: Map tile server style URL for location sharing. e.g. `https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE`
     This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
     at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
@@ -167,9 +174,13 @@ complete re-branding/private labeling, a more personalised experience can be ach
     1. `title`: Required. Title to show at the top of the notice.
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
-19. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
-20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
-21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
+19. `help_url`: The URL to point users to for help with the app. The unmodified upstream bundle defaults to `https://element.io/help`,
+    which is Element-operated and not applicable here; the checked-in Seventwos configs always set this explicitly and operators
+    should do the same rather than relying on the upstream default.
+20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`
+    upstream. As above, set this explicitly rather than relying on the Element-hosted default.
+21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`
+    upstream. As above, set this explicitly rather than relying on the Element-hosted default.
 22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
 
 ### `desktop_builds` and `mobile_builds`
@@ -188,12 +199,15 @@ Starting with `desktop_builds`, the following sub-properties are available:
 6. `url_win64arm`: Optional. Direct link to download Windows ARM 64-bit desktop app.
 7. `url_linux`: Optional. Direct link to download Linux desktop app.
 
-When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
+When `desktop_builds` is not specified at all, the unmodified upstream bundle will assume desktop downloads are available
+from `https://element.io`. That is an Element-hosted default this fork does not use; set `desktop_builds` explicitly to
+point at wherever you actually publish builds.
 
 For `mobile_builds`, the following subproperties are available:
 
 1. `ios`: The URL for where to download the iOS app, such as an App Store link. When explicitly `null`, the app will assume the
-   iOS app cannot be downloaded. When not provided, the default Element app will be assumed available.
+   iOS app cannot be downloaded. When not provided, the unmodified upstream bundle assumes the upstream Element mobile app is
+   available; set this explicitly (or to `null`) rather than relying on that Element-hosted default.
 2. `android`: The same as `ios`, except for Android instead.
 3. `fdroid`: The same as `android`, except for FDroid instead.
 
@@ -257,11 +271,11 @@ Together, the options might look like this in your config:
 }
 ```
 
-Note that `index.html` also has an og:image meta tag that is set to an image hosted on element.io. This is the image used if
-links to your copy of Element appear in some websites like Facebook, and indeed Element itself. This has to be static in the HTML
-and an absolute URL (and HTTP rather than HTTPS), so it's not possible for this to be an option in config.json. If you'd like to
-change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" pnpm build`. Alternatively, you can edit
-the `og:image` meta tag in `index.html` directly each time you download a new version of Element.
+Note that `index.html` also has an og:image meta tag that, in the unmodified upstream bundle, is set to an image hosted on
+`element.io`. This is the image used if links to your deployment appear on other sites (e.g. Facebook). This has to be static
+in the HTML and an absolute URL (and HTTP rather than HTTPS), so it is not possible to change via config.json; since this
+repository fetches a pre-built upstream bundle rather than compiling one, changing this meta tag requires editing `index.html`
+in the fetched bundle output directly.
 
 ## SSO setup
 
@@ -323,16 +337,18 @@ As an example:
 
 ## VoIP / Jitsi calls
 
-Currently, Element uses Jitsi to offer conference calls in rooms, with an experimental Element Call implementation in the works.
-A set of defaults are applied, pointing at our Jitsi and Element Call instances, to ensure conference calling works, however you
-can point Element at your own if you prefer.
+Currently, the unmodified upstream bundle uses Jitsi to offer conference calls in rooms, with an experimental Element Call
+implementation in the works. Upstream defaults point at Element-operated Jitsi and Element Call instances so that conference
+calling works out of the box, but this repository does not operate any such service, and the checked-in Seventwos configs
+intentionally omit call endpoints. Set these options to your own infrastructure before enabling calling for your users.
 
 More information about the Jitsi setup can be found [here](./jitsi.md).
 
 The VoIP and Jitsi options are:
 
 1. `jitsi`: Optional configuration for how to start Jitsi conferences. Currently can only contain a single `preferred_domain`
-   value which points at the domain of the Jitsi instance. Defaults to `meet.element.io`. This is _not_ used if the Jitsi widget
+   value which points at the domain of the Jitsi instance. The unmodified upstream bundle defaults to the Element-operated
+   `meet.element.io`; set this explicitly to your own Jitsi instance instead. This is _not_ used if the Jitsi widget
    was created by an integration manager, or if the homeserver provides Jitsi information in `/.well-known/matrix/client`. For
    example:
     ```json
@@ -364,7 +380,7 @@ The VoIP and Jitsi options are:
         }
     }
     ```
-4. `widget_build_url`: Optional URL to have Element make a request to when a user presses the voice/video call buttons in the app,
+4. `widget_build_url`: Optional URL to have the app make a request to when a user presses the voice/video call buttons in the app,
    if a call would normally be started by the action. The URL will be called with a `roomId` query parameter to identify the room
    being called in. The URL must respond with a JSON object similar to the following:
     ```json
@@ -391,8 +407,9 @@ The VoIP and Jitsi options are:
     }
     ```
     The `widget` is the `content` of a normal widget state event. The `layout` is the layout specifier for the widget being created,
-    as defined by the `io.element.widgets.layout` state event. By default this applies to all rooms, but the behaviour can be skipped for
-    2-person rooms, causing Element to fall back to 1:1 VoIP, by setting the option `widget_build_url_ignore_dm` to `true`.
+    as defined by the `io.element.widgets.layout` state event (a protocol-defined key retained for compatibility). By default this
+    applies to all rooms, but the behaviour can be skipped for 2-person rooms, causing the app to fall back to 1:1 VoIP, by setting
+    the option `widget_build_url_ignore_dm` to `true`.
 5. `audio_stream_url`: Optional URL to pass to Jitsi to enable live streaming. This option is considered experimental and may be removed
    at any time without notice.
 6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
@@ -417,11 +434,12 @@ The VoIP and Jitsi options are:
 If you run your own rageshake server to collect bug reports, the following options may be of interest:
 
 1. `bug_report_endpoint_url`: URL for where to submit rageshake logs to. Rageshakes include feedback submissions and bug reports. When
-   not present in the config, the app will disable all rageshake functionality. Set to `https://rageshakes.element.io/api/submit` to submit
-   rageshakes to us, or use your own rageshake server.
+   not present in the config, the app will disable all rageshake functionality — this is the state of the checked-in Seventwos configs,
+   which do not set a rageshake endpoint. This fork does not operate `rageshakes.element.io` or any other rageshake server; if you want
+   this feature, run and configure your own rageshake server here rather than pointing at Element's.
    You may also set the value to `"local"` if you wish to only store logs locally, in order to download them for debugging.
-2. `existing_issues_url`: URL for where to find existing issues.
-3. `new_issue_url`: URL for where to submit new issues.
+2. `existing_issues_url`: URL for where to find existing issues, e.g. this repository's issue tracker.
+3. `new_issue_url`: URL for where to submit new issues, e.g. this repository's "new issue" page.
 
 If you would like to use [Sentry](https://sentry.io/) for rageshake data, add a `sentry` object to your config with the following values:
 
@@ -441,27 +459,17 @@ For example:
 
 ## Integration managers
 
-Integration managers are embedded applications within Element to help the user configure bots, bridges, and widgets. An integration manager
-is a separate piece of software not typically available with your homeserver. To disable integrations, set the options defined here to `null`.
+Integration managers are embedded applications within the app to help the user configure bots, bridges, and widgets. An integration
+manager is a separate piece of software not typically available with your homeserver. To disable integrations, set the options
+defined here to `null` (or, as `integrations_widgets_urls`, to an empty array). The checked-in Seventwos configs already set
+`integrations_widgets_urls` to `[]`, disabling integration manager widgets by default.
 
 1. `integrations_ui_url`: The UI URL for the integration manager.
 2. `integrations_rest_url`: The REST interface URL for the integration manager.
 3. `integrations_widgets_urls`: A list of URLs the integration manager uses to host widgets.
 
-If you would like to use Scalar, the integration manager maintained by Element, the following options would apply:
-
-```json
-{
-    "integrations_ui_url": "https://scalar.vector.im/",
-    "integrations_rest_url": "https://scalar.vector.im/api",
-    "integrations_widgets_urls": [
-        "https://scalar.vector.im/_matrix/integrations/v1",
-        "https://scalar.vector.im/api",
-        "https://scalar-staging.vector.im/_matrix/integrations/v1",
-        "https://scalar-staging.vector.im/api"
-    ]
-}
-```
+Scalar is an integration manager operated by Element (`scalar.vector.im`); this fork does not run or endorse it, so it is not
+configured here. If you want an integration manager, point these options at one you operate or trust yourself.
 
 For widgets in general (from an integration manager or not) there is also:
 
@@ -527,10 +535,10 @@ The identity server is used for inviting other users to a room via third party
 identifiers like emails and phone numbers. It is not used to store your password
 or account information.
 
-As of Element 1.4.0, all identity server functions are optional and you are
-prompted to agree to terms before data is sent to the identity server.
+All identity server functions are optional and the user is prompted to agree to terms before data is sent to the identity
+server.
 
-Element will check multiple sources when looking for an identity server to use in
+The app will check multiple sources when looking for an identity server to use in
 the following order of preference:
 
 1. The identity server set in the user's account data
@@ -538,19 +546,20 @@ the following order of preference:
       if the user visits Settings and manually changes their identity server.
 2. The identity server provided by the `.well-known` lookup that occurred at
    login
-3. The identity server provided by the Riot config file
+3. The identity server provided by this config file
 
-If none of these sources have an identity server set, then Element will prompt the
+If none of these sources have an identity server set, then the app will prompt the
 user to set an identity server first when attempting to use features that
 require one.
 
-Currently, the only two public identity servers are https://vector.im and
-https://matrix.org, however in the future identity servers will be
-decentralised.
+This repository does not operate an identity server. Two long-running public identity servers exist in the wider Matrix
+ecosystem (`https://vector.im`, operated by Element, and `https://matrix.org`, operated by the Matrix.org Foundation), but
+neither is set by default in the checked-in Seventwos configs; operators wanting identity-server functionality should
+configure a server of their own choosing.
 
 ## Desktop app configuration
 
-See https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson
+See [`apps/desktop/README.md#user-specified-configjson`](../apps/desktop/README.md#user-specified-configjson).
 
 ## UI Features
 
@@ -608,7 +617,7 @@ Currently, the following UI feature flags are supported:
 }
 ```
 
-Each module URL is loaded using dynamic import (`import()`). The modules are loaded in order after Element Web initializes but before the application fully starts. Modules must be accessible from the browser and should export a compatible module format that works with the [Module API](https://github.com/element-hq/element-web/tree/develop/packages/module-api).
+Each module URL is loaded using dynamic import (`import()`). The modules are loaded in order after the app initializes but before the application fully starts. Modules must be accessible from the browser and should export a compatible module format that works with the [Module API](../packages/module-api/README.md).
 
 ## Undocumented / developer options
 
@@ -619,14 +628,16 @@ The following are undocumented or intended for developer use only.
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
 
-## Additional config options for Element Desktop
+## Additional config options for the Desktop app
 
-1. `update_base_url`: Specifies the URL of the update server, see [document](https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/updates.md).
-2. `web_base_url`: Specifies the Element Web URL when performing actions such as popout widget. Defaults to `https://app.element.io/`.
+1. `update_base_url`: Specifies the URL of the update server, see [`updates.md`](./updates.md).
+2. `web_base_url`: Specifies the web app URL when performing actions such as popout widget. The unmodified upstream bundle defaults
+   to the Element-hosted `https://app.element.io/`; the checked-in Seventwos configs override this and operators should always
+   set their own value.
 
 ---
 
-The app contains a configuration file specified at build time using [these instructions](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#config).
-This config can be overwritten by the end using by creating a `config.json` file at the paths described [here](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson).
+The app contains a configuration file specified at build time using [these instructions](../apps/desktop/README.md#config).
+This config can be overwritten by the end user by creating a `config.json` file at the paths described [here](../apps/desktop/README.md#user-specified-configjson).
 
 After changing the config, the app will need to be exited fully (including via the task tray) and re-started.

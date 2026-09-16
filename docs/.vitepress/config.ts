@@ -20,19 +20,17 @@ function customPathResolver(href: string, currentPath: string): string {
     switch (link) {
         case "../packages/shared-components/README.md":
             return `../docs/readme-shared-components.md#${fragment}`;
-        case "../apps/web/README.md":
-            return `../docs/readme-element-web.md#${fragment}`;
         case "../README.md":
             return `../docs/index.md#${fragment}`;
 
         default:
-            return `https://github.com/element-hq/element-web/blob/develop/${href.split("/").pop()}`;
+            return `https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/${href.split("/").pop()}`;
     }
 }
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid({
-    title: "Element Web & Desktop docs",
+    title: "Seventwos Workspace for Desktop docs",
     description: "Documentation",
     srcExclude: ["changelogs"],
     markdown: {
@@ -62,7 +60,7 @@ export default withMermaid({
     themeConfig: {
         nav: [
             { text: "Home", link: "/" },
-            { text: "Website", link: "https://element.io/en" },
+            { text: "Website", link: "https://seventwos.org" },
         ],
 
         search: {
@@ -74,7 +72,6 @@ export default withMermaid({
                 text: "README",
                 items: [
                     { text: "Introduction", link: "/index" },
-                    { text: "Element Web", link: "/readme-element-web" },
                     { text: "Element Desktop", link: "/readme-element-desktop" },
                     { text: "Shared Components", link: "/readme-shared-components" },
                 ],
@@ -89,10 +86,8 @@ export default withMermaid({
             {
                 text: "Setup",
                 items: [
-                    { text: "Install", link: "/install" },
                     { text: "Config", link: "/config" },
                     { text: "Custom home page", link: "/custom-home" },
-                    { text: "Kubernetes", link: "/kubernetes" },
                     { text: "Jitsi", link: "/jitsi" },
                     { text: "Encryption", link: "/e2ee" },
                 ],
@@ -100,13 +95,6 @@ export default withMermaid({
             {
                 text: "Build",
                 items: [
-                    {
-                        text: "Web",
-                        items: [
-                            { text: "Customisations", link: "/customisations" },
-                            { text: "Deprecated Modules", link: "/deprecated-modules" },
-                        ],
-                    },
                     {
                         text: "Desktop",
                         items: [
@@ -129,14 +117,12 @@ export default withMermaid({
                 text: "Development",
                 items: [
                     { text: "App load order", link: "/app-load.md" },
-                    { text: "Translation", link: "/translating-dev.md" },
                     { text: "Theming", link: "/theming.md" },
                     { text: "Playwright end to end tests", link: "/playwright.md" },
                     { text: "Memory profiling", link: "/memory-profiles-and-leaks.md" },
                     { text: "Jitsi", link: "/jitsi-dev.md" },
                     { text: "Feature flags", link: "/feature-flags.md" },
                     { text: "OAuth and delegated authentication", link: "/oauth.md" },
-                    { text: "Release Process", link: "/release.md" },
                     { text: "MVVM", link: "/MVVM.md" },
                     { text: "Settings", link: "/settings.md" },
                 ],
@@ -158,6 +144,6 @@ export default withMermaid({
             },
         ],
 
-        socialLinks: [{ icon: "github", link: "https://github.com/element-hq/element-web" }],
+        socialLinks: [{ icon: "github", link: "https://github.com/seventwos-app/usr-workspace-desktop" }],
     },
 });

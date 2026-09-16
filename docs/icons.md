@@ -1,7 +1,7 @@
 # Icons
 
 Icons are loaded using [@svgr/webpack](https://www.npmjs.com/package/@svgr/webpack).
-This is configured in [element-web](https://github.com/vector-im/element-web/blob/develop/webpack.config.js#L458).
+This is configured in [element-web](https://github.com/element-hq/element-web/blob/develop/webpack.config.js#L458).
 
 Each `.svg` exports a `ReactComponent` at the named export `Icon`.
 Icons have `role="presentation"` and `aria-hidden` automatically applied. These can be overriden by passing props to the icon component.

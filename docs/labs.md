@@ -1,14 +1,15 @@
 # Labs features
 
-If Labs is enabled in the [Element config](config.md), you can enable some of these features by going
-to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
-[#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
+If Labs is enabled in the [config](config.md), you can enable some of these features by going
+to `Settings->Labs`. This list is non-exhaustive and subject to change; see the upstream
+[element-hq/element-web](https://github.com/element-hq/element-web) project for more information on
+individual flags, or open an issue in this repository if something here is unclear.
 
 If a labs features gets more stable, it _may_ be promoted to a beta feature
-(see [Betas](https://github.com/element-hq/element-web/blob/develop/docs/betas.md)).
+(see [Betas](./betas.md)).
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
-dropped. Ask in the room if you are unclear about any details here.**
+dropped.**
 
 ## Render LaTeX maths in messages (`feature_latex_maths`)
 

@@ -136,7 +136,7 @@ protocol.registerSchemesAsPrivileged([
 // transition into the user's browser.
 app.enableSandbox();
 
-// We disable media controls here. We do this because calls use audio and video elements and they sometimes capture the media keys. See https://github.com/vector-im/element-web/issues/15704
+// We disable media controls here. We do this because calls use audio and video elements and they sometimes capture the media keys. See https://github.com/element-hq/element-web/issues/15704
 app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling,MediaSessionService");
 
 const store = Store.initialize(args.storageMode); // must be called before any async actions

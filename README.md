@@ -61,6 +61,6 @@ Copyright (c) 2017 - 2025 New Vector Ltd.
 
 These upstream copyright notices are retained in recognition of the work on which this fork is based.
 
-We license the repository-owned code under the GNU Affero General Public License v3 only. See [LICENSE-AGPL-3.0](LICENSE-AGPL-3.0) for the applicable terms. Third-party dependencies remain under their respective licences.
+We license the repository-owned code under the GNU Affero General Public License v3 only. See [LICENSE-AGPL-3.0](https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/LICENSE-AGPL-3.0) for the applicable terms. Third-party dependencies remain under their respective licences.
 
 Our modifications and newly authored repository code use AGPL-3.0-only. When we distribute a modified version or make one available for users to interact with over a network, we provide the corresponding source as required by the AGPL.

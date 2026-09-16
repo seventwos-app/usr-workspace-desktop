@@ -41,7 +41,7 @@ export function getArgsForProtocolRegistration(parsedArgs: Args): string[] {
 }
 
 /**
- * Element Desktop launch args, returned by {@link getArgs}
+ * Seventwos Workspace for Desktop launch args, returned by {@link getArgs}
  */
 export interface Args {
     /**
@@ -83,6 +83,32 @@ function isRealUserDataDir(d: string): boolean {
     return fs.existsSync(path.join(d, "IndexedDB"));
 }
 
+/**
+ * Seventwos Workspace for Desktop's userData directory naming has changed twice over this app's history:
+ * it was previously distributed as "Element" and, further back still, as "Riot". Real installs from
+ * those eras may still have their profile data sitting under those literal legacy directory names on
+ * disk, so we check for them here (most-recent legacy name first) and migrate seamlessly rather than
+ * starting the user off with an empty profile. These legacy names are historical on-disk facts and must
+ * not be changed even as the app's branding continues to evolve.
+ */
+const LEGACY_USER_DATA_DIR_NAMES = ["Element", "Riot"];
+
+function findLegacyUserDataPath(argv: ParsedArgs): string | undefined {
+    for (const legacyName of LEGACY_USER_DATA_DIR_NAMES) {
+        let candidatePath = path.join(app.getPath("appData"), legacyName);
+        if (argv["profile"]) {
+            candidatePath += "-" + argv["profile"];
+        }
+
+        const candidatePathExists = isRealUserDataDir(candidatePath);
+        console.log(`${candidatePath} exists: ${candidatePathExists ? "yes" : "no"}`);
+        if (candidatePathExists) {
+            return candidatePath;
+        }
+    }
+    return undefined;
+}
+
 function getUserDataPath(argv: ParsedArgs, protocolHandler: ProtocolHandler): string {
     // check if we are passed a profile in the SSO callback url
     const userDataPathInProtocol = protocolHandler.getProfileFromDeeplink(argv["_"]);
@@ -94,24 +120,20 @@ function getUserDataPath(argv: ParsedArgs, protocolHandler: ProtocolHandler): st
         return argv["profile-dir"];
     }
 
-    let newUserDataPath = process.env.ELEMENT_PROFILE_DIR ?? defaultUserDataDir;
+    let newUserDataPath = process.env.SEVENTWOS_WORKSPACE_PROFILE_DIR ?? process.env.ELEMENT_PROFILE_DIR ?? defaultUserDataDir;
     if (argv["profile"]) {
         newUserDataPath += "-" + argv["profile"];
     }
 
     const newUserDataPathExists = isRealUserDataDir(newUserDataPath);
-    let oldUserDataPath = path.join(app.getPath("appData"), app.getName().replace("Element", "Riot"));
-    if (argv["profile"]) {
-        oldUserDataPath += "-" + argv["profile"];
-    }
-
-    const oldUserDataPathExists = isRealUserDataDir(oldUserDataPath);
     console.log(`${newUserDataPath} exists: ${newUserDataPathExists ? "yes" : "no"}`);
-    console.log(`${oldUserDataPath} exists: ${oldUserDataPathExists ? "yes" : "no"}`);
 
-    if (!newUserDataPathExists && oldUserDataPathExists) {
-        console.log(`Using legacy user data path: ${oldUserDataPath}`);
-        return oldUserDataPath;
+    if (!newUserDataPathExists) {
+        const oldUserDataPath = findLegacyUserDataPath(argv);
+        if (oldUserDataPath) {
+            console.log(`Using legacy user data path: ${oldUserDataPath}`);
+            return oldUserDataPath;
+        }
     }
     return newUserDataPath;
 }
@@ -132,12 +154,12 @@ export function getArgs(protocolHandler: ProtocolHandler): Args {
         console.log(
             `  --profile {name}:     Name of alternate profile to use, allows for running multiple accounts.\n` +
                 `                         Ignored if --profile-dir is specified.\n` +
-                `                         The ELEMENT_PROFILE_DIR environment variable may be used to change the default profile path.\n` +
+                `                         The SEVENTWOS_WORKSPACE_PROFILE_DIR environment variable (or its legacy alias ELEMENT_PROFILE_DIR) may be used to change the default profile path.\n` +
                 `                         It is overridden by --profile-dir, but can be combined with --profile.`,
         );
         console.log("  --devtools:           Install and use react-devtools and react-perf.");
         console.log(
-            `  --config:             Path to the config.json file. May also be specified via the ELEMENT_DESKTOP_CONFIG_JSON environment variable.\n` +
+            `  --config:             Path to the config.json file. May also be specified via the SEVENTWOS_WORKSPACE_DESKTOP_CONFIG_JSON environment variable (or its legacy alias ELEMENT_DESKTOP_CONFIG_JSON).\n` +
                 `                         Otherwise use the default user location '${defaultUserDataDir}'`,
         );
         console.log("  --no-update:          Disable automatic updating.");
@@ -154,7 +176,7 @@ export function getArgs(protocolHandler: ProtocolHandler): Args {
 
     return {
         userDataPath: getUserDataPath(argv, protocolHandler),
-        localConfigPath: argv["config"] ?? process.env.ELEMENT_DESKTOP_CONFIG_JSON,
+        localConfigPath: argv["config"] ?? process.env.SEVENTWOS_WORKSPACE_DESKTOP_CONFIG_JSON ?? process.env.ELEMENT_DESKTOP_CONFIG_JSON,
         storageMode,
         devtools: argv["devtools"] || false,
         // Minimist parses `--no-`-prefixed arguments as booleans with value `false` rather than verbatim.

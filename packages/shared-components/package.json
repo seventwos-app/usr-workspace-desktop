@@ -1,11 +1,15 @@
 {
     "name": "@element-hq/web-shared-components",
     "version": "0.2.0",
-    "description": "Shared components for Element",
-    "author": "New Vector Ltd.",
+    "private": true,
+    "description": "Shared UI components used internally to build Seventwos Workspace for Desktop (inherited from Element Web).",
+    "author": {
+        "name": "Seventwos"
+    },
     "repository": {
         "type": "git",
-        "url": "https://github.com/element-hq/element-web"
+        "url": "https://github.com/seventwos-app/usr-workspace-desktop",
+        "directory": "packages/shared-components"
     },
     "type": "module",
     "exports": {

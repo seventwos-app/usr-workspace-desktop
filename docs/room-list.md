@@ -4,11 +4,14 @@ The room list is the sorted, filtered list of rooms in the left-hand navigation 
 scoped to the active space. It is a full [MVVM](MVVM.md) feature split across three layers:
 
 - **Model** — `RoomListStoreV3`, the store that keeps every room sorted and answers queries for
-  the rooms in the active space. It lives in
-  [`apps/web/src/stores/room-list-v3/`](https://github.com/element-hq/element-web/tree/develop/apps/web/src/stores/room-list-v3/).
+  the rooms in the active space. It lives in `apps/web/src/stores/room-list-v3/` in the upstream
+  [element-hq/element-web](https://github.com/element-hq/element-web/tree/develop/apps/web/src/stores/room-list-v3/)
+  source (this repository does not contain `apps/web`; it fetches a pre-built bundle instead).
 - **View models** — adapt the store (and other stores) into snapshots for the UI. They live in
-  [`apps/web/src/viewmodels/room-list/`](https://github.com/element-hq/element-web/tree/develop/apps/web/src/viewmodels/room-list/).
-- **Views** — the presentational React components, owned by `@element-hq/web-shared-components`.
+  `apps/web/src/viewmodels/room-list/`, likewise upstream in
+  [element-hq/element-web](https://github.com/element-hq/element-web/tree/develop/apps/web/src/viewmodels/room-list/).
+- **Views** — the presentational React components, owned by the `@element-hq/web-shared-components` package (kept as its
+  upstream-compatible technical name), which lives in this repository at `packages/shared-components/src/room-list/`.
 
 ## Architecture
 
@@ -119,7 +122,8 @@ its tags:
 The store keeps an ordered list of section tags — Favourites first, Low Priority last, and the
 custom sections plus Chats reorderable in between (new custom sections are inserted just above
 Chats by default). Custom sections can be created, renamed, removed, and reordered through
-dialogs; that logic lives in [`section.ts`](https://github.com/element-hq/element-web/blob/develop/apps/web/src/stores/room-list-v3/section.ts).
+dialogs; that logic lives in `apps/web/src/stores/room-list-v3/section.ts` upstream, in
+[element-hq/element-web](https://github.com/element-hq/element-web/blob/develop/apps/web/src/stores/room-list-v3/section.ts).
 
 Each custom section also records the space it was created in, which controls the visibility of
 empty sections: an empty custom section is only shown in the space it belongs to, so sections
@@ -164,7 +168,8 @@ device-local so that collapsing a section on one device doesn't affect the other
 
 ## View models
 
-The view models in [`apps/web/src/viewmodels/room-list/`](https://github.com/element-hq/element-web/tree/develop/apps/web/src/viewmodels/room-list/)
+The view models in `apps/web/src/viewmodels/room-list/` upstream, in
+[element-hq/element-web](https://github.com/element-hq/element-web/tree/develop/apps/web/src/viewmodels/room-list/),
 extend `BaseViewModel` and produce immutable snapshots consumed by the views (see [MVVM](MVVM.md)
 for the base pattern).
 
@@ -188,16 +193,18 @@ view model. They do not share state directly; the header view model and the root
 through the global dispatcher, in both directions — collapse-all-sections, for instance, is
 requested by the header and the resulting state dispatched back to it.
 
-Permission and create-room helpers used by these view models live in
-[`utils.ts`](https://github.com/element-hq/element-web/blob/develop/apps/web/src/viewmodels/room-list/utils.ts).
+Permission and create-room helpers used by these view models live in `apps/web/src/viewmodels/room-list/utils.ts`
+upstream, in [element-hq/element-web](https://github.com/element-hq/element-web/blob/develop/apps/web/src/viewmodels/room-list/utils.ts).
 
 ## Views
 
-The presentational components are owned by `@element-hq/web-shared-components` (developed in
+The presentational components are owned by the local `packages/shared-components` package (published as
+`@element-hq/web-shared-components`, its upstream-compatible technical name; developed in
 Storybook); `apps/web` supplies the view models, a `renderAvatar` callback and a key handler for
 landmark navigation, and the shared package owns the rendering. The app-side entry point is
-[`RoomListPanel`](https://github.com/element-hq/element-web/blob/develop/apps/web/src/components/views/rooms/RoomListPanel/RoomListPanel.tsx), which
-composes the search row, the header view, and the room list itself.
+`RoomListPanel`, in `apps/web/src/components/views/rooms/RoomListPanel/RoomListPanel.tsx` upstream, in
+[element-hq/element-web](https://github.com/element-hq/element-web/blob/develop/apps/web/src/components/views/rooms/RoomListPanel/RoomListPanel.tsx),
+which composes the search row, the header view, and the room list itself.
 
 The room list proper is `RoomListView`, which renders the filter chips and any toast above a body
 that is a loading skeleton, an empty state, or — in the usual case — `VirtualizedRoomListView`
