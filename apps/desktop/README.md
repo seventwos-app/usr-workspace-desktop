@@ -104,6 +104,10 @@ call, or Scalar endpoints. Add only operated Seventwos services in an explicit c
 and SHA-256 digest, builds unsigned packages, and never publishes them. It has no release-event trigger, deployment
 permissions, Element credentials, Element package-service integration, or inherited secret access.
 
+`Desktop Validation` is the required PR and merge-queue safety gate. It runs desktop source and script type checks,
+validates the remaining workflow definitions and checked-in Seventwos JSON configs, and runs the desktop unit suite.
+It does not fetch a web bundle, package applications, sign artifacts, publish releases, or contact deployment services.
+
 No signing secrets are accepted because Seventwos does not yet have Apple or Windows signing accounts. When those
 accounts exist, add signing in a reviewed change using protected environments and Seventwos-prefixed secrets only.
 Do not add credentials to this repository.
