@@ -43,11 +43,11 @@ The intended desktop implementation includes:
 
 Element Web is the upstream foundation and architectural reference for this workspace, not the target product identity.
 
-## Repository role
+## Repository scope
 
-The Seventwos workspace captures product intent and human direction. This repository captures the desktop implementation, review history, and upstream attribution.
+This is the product repository for Seventwos Workspace for Desktop. It is the source of truth for the desktop application code, Electron packaging and platform integrations, build and test configuration, and release preparation.
 
-Changes should make the transition from inherited application code explicit and auditable. New product code should follow the repository's architecture and contribution rules.
+Changes in this repository should directly support the desktop client. Shared services and cross-platform product material are maintained separately; the origins and licensing of upstream-derived code are documented below.
 
 ## Provenance and licence
 
