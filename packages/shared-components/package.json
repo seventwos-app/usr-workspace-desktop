@@ -2,6 +2,7 @@
     "name": "@element-hq/web-shared-components",
     "version": "0.2.0",
     "private": true,
+    "license": "AGPL-3.0-only",
     "description": "Shared UI components used internally to build Seventwos Workspace for Desktop (inherited from Element Web).",
     "author": {
         "name": "Seventwos"

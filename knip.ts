@@ -36,58 +36,6 @@ export default {
             ignoreBinaries: ["awk"],
         },
         "packages/module-api": {},
-        "apps/web": {
-            entry: [
-                "src/workers/*.worker.ts!",
-                "src/utils/exportUtils/exportJS.js!",
-                "src/vector/localstorage-fix.ts!",
-                "scripts/**",
-                "playwright/**",
-                "test/**",
-                "res/decoder-ring/**",
-                "res/jitsi_external_api.min.js",
-                "res/themes/*/css/*.pcss!",
-                "I18nWebpackPlugin.ts!",
-                // Keep for now
-                "src/hooks/useLocalStorageState.ts!",
-                "src/hooks/useIsReleaseAnnouncementOpen.ts!",
-                "src/components/structures/ReleaseAnnouncement.tsx!",
-                "src/utils/arrays.ts!",
-                "src/utils/EventPresentationContextProvider.tsx!",
-                // This is just an awful side-effect import
-                "src/stores/LifecycleStore.ts!",
-                // New timeline: only its own tests import this so far, and --strict does not
-                // count tests as entry points. NewTimelinePanel picks it up in a follow-up PR,
-                // at which point this line can go.
-                "src/viewmodels/room/timeline/RoomTimelineViewModel.ts!",
-            ],
-            project: [
-                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
-                "!scripts/**!",
-                "!src/test/**!",
-                "!recorder-worklet-loader.cjs!",
-                "!src/**/*-{mock,mocks,snapshot,actions}.*!",
-            ],
-            ignoreDependencies: [
-                // Embedded into webapp
-                "@element-hq/element-call-embedded",
-
-                // Used by matrix-js-sdk, which means we have to include them as a
-                // dependency so that // we can run `tsc` (since we import the typescript
-                // source of js-sdk, rather than the transpiled and annotated JS like you
-                // would with a normal library).
-                "@types/sdp-transform",
-
-                // Referenced as a tsconfig `types` entry rather than imported, so knip
-                // cannot see it. It has to be a direct dependency for
-                // `@vitest/browser/matchers` to resolve under pnpm's strict node_modules.
-                // See apps/web/tsconfig.browser-test.json.
-                "@vitest/browser",
-
-                // Used by Playwright to serve the built web app.
-                "serve",
-            ],
-        },
         "apps/desktop": {
             entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
             project: ["**/*.{js,ts,pcss}"],

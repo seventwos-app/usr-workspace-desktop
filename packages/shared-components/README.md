@@ -375,6 +375,14 @@ To generate translation strings for this package, run:
 pnpm i18n
 ```
 
+## Copyright & License
+
+Copyright (c) 2026 Element Creations Ltd.
+
+Seventwos distributes this component under the GNU Affero General Public License v3 only.
+See [LICENSE-AGPL-3.0](https://github.com/seventwos-app/usr-workspace-desktop/blob/develop/LICENSE-AGPL-3.0)
+for the applicable terms.
+
 ## Versioning
 
 This package is private and internal to this monorepo (see [`../RELEASING.md`](../RELEASING.md)); it is not published to any registry.
