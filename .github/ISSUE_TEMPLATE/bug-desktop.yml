@@ -1,5 +1,5 @@
-name: Bug report for the Element desktop app (not in a browser)
-description: File a bug report if you are using the desktop Element application.
+name: Bug report for Seventwos Workspace for Desktop
+description: File a bug report if you are using the Seventwos Workspace desktop application.
 labels: [T-Defect, A-Electron]
 body:
     - type: markdown
@@ -43,7 +43,7 @@ body:
       attributes:
           label: Application version
           description: You can find the version information in Settings -> Help & About.
-          placeholder: e.g. Element version 1.7.34, olm version 3.2.3
+          placeholder: e.g. Seventwos Workspace version 1.7.34
       validations:
           required: false
     - type: input
@@ -51,7 +51,7 @@ body:
       attributes:
           label: How did you install the app?
           description: Where did you install the app from? Please give a link or a description.
-          placeholder: e.g. From https://element.io/get-started
+          placeholder: e.g. From a Seventwos Workspace GitHub release
       validations:
           required: false
     - type: input
