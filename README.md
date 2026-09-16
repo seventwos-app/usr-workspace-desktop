@@ -12,11 +12,16 @@ Element does not publish an Element X desktop client. The Element desktop applic
 
 ## Repository layout
 
-This repository is a monorepo inherited from Element Web:
+This repository is a monorepo inherited from Element Web. Since Seventwos Workspace for Desktop is a
+standalone client, `apps/web` (the browser application) has been removed. The layout is:
 
-- `apps/web` — the browser application.
 - `apps/desktop` — the Electron desktop application, previously maintained as `element-desktop`.
-- `packages/` and `modules/` — shared libraries and optional modules.
+- `packages/` and `modules/` — shared libraries and optional modules used to build `apps/desktop`.
+
+The desktop app packages a pre-built web UI bundle at build time rather than compiling one locally in
+this repository — see `apps/desktop/scripts/fetch-package.ts`. Today that script fetches the upstream
+Element Web release; pointing it at a Seventwos-authored web build is part of the ongoing transition
+away from inherited Element code.
 
 ## Status
 

@@ -4,11 +4,11 @@ Some words about the structure of monorepo we are using here.
 
 ### Structure
 
-The monorepo is focused around multiple Typescript projects coming together to form an Element Web & Element Desktop app.
-Some of the underlying typescript projects are useful for re-use elsewhere,
-e.g. `@element-hq/web-shared-components` is reused by https://github.com/element-hq/aurora.
+The monorepo is inherited from Element Web, which originally hosted both a web app and a desktop app side by side.
+This repository has been trimmed to `apps/desktop` only, since the Seventwos workspace desktop client is a
+standalone desktop application and does not ship a browser-based build.
 
-- `apps` - this directory holds the apps we build, `element-web` & `element-desktop`
+- `apps` - this directory holds the app we build, `element-desktop`
     - Things in here are not published to npm
     - Things in here have very non-standard publishing steps, e.g. Element Desktop `.deb` ships via reprepro.
     - Things in here are in lock-step versions with each other
