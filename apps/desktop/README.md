@@ -14,22 +14,21 @@ Before you do anything else, fetch the dependencies:
 pnpm install
 ```
 
-# Fetching Element
+# Fetching the upstream web bundle
 
-Since this package is just the Electron wrapper for Element Web, it doesn't contain any of the Element Web code,
-so the first step is to get a working copy of Element Web. There are a few ways of doing this:
+Since this package is an Electron wrapper, it does not contain the upstream web bundle. Fetch a compatible web bundle before building:
 
 ```
-# Fetch the prebuilt release Element package from the element-web GitHub releases page. The version
+# Fetch the compatible prebuilt upstream package. The version
 # fetched will be the same as the local element-desktop package.
-# We're explicitly asking for no config, so the packaged Element will have no config.json.
+# We're explicitly asking for no config, so the packaged app will have no config.json.
 pnpm run fetch --noverify --cfgdir ""
 ```
 
 ...or if you'd like to use GPG to verify the downloaded package:
 
 ```
-# Fetch the Element public key from the element.io web server over a secure connection and import
+# Fetch the upstream public key over a secure connection and import
 # it into your local GPG keychain (you'll need GPG installed). You only need to to do this
 # once.
 pnpm run fetch --importkey
@@ -37,10 +36,10 @@ pnpm run fetch --importkey
 pnpm run fetch --cfgdir ""
 ```
 
-...or either of the above, but fetching a specific version of Element:
+...or either of the above, but fetching a specific upstream version:
 
 ```
-# Fetch the prebuilt release Element package from the element-web GitHub releases page. The version
+# Fetch the compatible prebuilt upstream package. The version
 # fetched will be the same as the local element-desktop package.
 pnpm run fetch --noverify --cfgdir "" v1.5.6
 ```
@@ -72,7 +71,7 @@ pnpm run build
 This will do a couple of things:
 
 - Run the `setversion` script to set the local package version to match whatever
-  version of Element you installed above.
+  version of the upstream bundle you installed above.
 - Run electron-builder to build a package. The package built will match the operating system
   you're running the build process on.
 
@@ -102,7 +101,7 @@ pnpm start
 
 # Config
 
-If you'd like the packaged Element to have a configuration file, you can create a
+If you'd like the packaged Seventwos Workspace app to have a configuration file, you can create a
 config directory and place `config.json` in there, then specify this directory
 with the `--cfgdir` option to `pnpm run fetch`, eg:
 
@@ -112,8 +111,7 @@ cp /path/to/my/config.json myconfig/
 pnpm run fetch --cfgdir myconfig
 ```
 
-The config dir for the official Element app is in `element.io`. If you use this,
-your app will auto-update itself using builds from element.io.
+Do not use the configuration directory for the official Element app: it can cause the app to use Element's update channel.
 
 # Profiles
 
@@ -131,9 +129,7 @@ Alternatively, a custom location for the profile data can be specified using the
 - `$XDG_CONFIG_HOME/$NAME/config.json` or `~/.config/$NAME/config.json` on Linux
 - `~/Library/Application Support/$NAME/config.json` on macOS
 
-In the paths above, `$NAME` is typically `Element`, unless you use `--profile
-$PROFILE` in which case it becomes `Element-$PROFILE`, or it is using one of
-the above created by a pre-1.7 install, in which case it will be `Riot` or
+In the paths above, `$NAME` is determined by the installed app. Legacy upstream installations can use `Element-$PROFILE`, `Riot`, or
 `Riot-$PROFILE`.
 
 You may also specify a different path entirely for the `config.json` file by
@@ -142,15 +138,13 @@ providing the `--config $YOUR_CONFIG_JSON_FILE` to the process, or via the
 
 # Translations
 
-To add a new translation, head to the [translating doc](https://github.com/element-hq/element-web/blob/develop/docs/translating.md).
-
-For a developer guide, see the [translating dev doc](https://github.com/element-hq/element-web/blob/develop/docs/translating-dev.md).
+See this repository's translation workflow and developer documentation when they are available.
 
 # Report bugs & give feedback
 
 If you run into any bugs or have feedback you'd like to share, please let us know on GitHub.
 
-To help avoid duplicate issues, please [view existing issues](https://github.com/element-hq/element-web/issues?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc) first (and add a +1) or [create a new issue](https://github.com/element-hq/element-web/issues/new/choose) if you can't find it. Please note that this issue tracker is associated with the [element-web](https://github.com/element-hq/element-web) repo, but is also applied to the code in this repo as well.
+To help avoid duplicate issues, please [view existing issues](https://github.com/seventwos-app/usr-workspace-desktop/issues?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc) first or [create a new issue](https://github.com/seventwos-app/usr-workspace-desktop/issues/new/choose) if you cannot find it.
 
 ## Copyright & License
 
