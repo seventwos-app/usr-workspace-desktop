@@ -29,8 +29,8 @@ jobs:
                   cache-dependency-path: pnpm-lock.yaml
                   node-version: "lts/*"
 
-            - name: Fetch layered build
-              run: ./scripts/layered.sh
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
             - name: Build docs
               run: pnpm run docs:build
