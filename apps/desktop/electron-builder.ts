@@ -16,13 +16,13 @@ import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/modul
  * This script has different outputs depending on your os platform.
  *
  * On Windows:
- *  Passes $ED_SIGNTOOL_THUMBPRINT and $ED_SIGNTOOL_SUBJECT_NAME to
+ *  Passes $SEVENTWOS_WORKSPACE_SIGNTOOL_THUMBPRINT and $SEVENTWOS_WORKSPACE_SIGNTOOL_SUBJECT_NAME to
  *      build.win.signtoolOptions.signingHashAlgorithms and build.win.signtoolOptions.certificateSubjectName respectively if specified.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
  *  Removes libsqlcipher0 recommended dependency if env SQLCIPHER_BUNDLED is asserted.
- *  Passes $ED_DEBIAN_CHANGELOG to build.deb.fpm if specified
+ *  Passes $SEVENTWOS_WORKSPACE_DEBIAN_CHANGELOG to build.deb.fpm if specified
  */
 
 /**
@@ -224,12 +224,14 @@ if (variant["linux.deb.name"]) {
 
 /**
  * Allow specifying windows signing cert via env vars
- * @param {string} process.env.ED_SIGNTOOL_SUBJECT_NAME
- * @param {string} process.env.ED_SIGNTOOL_THUMBPRINT
+ * Legacy ED_SIGNTOOL_* names remain fallback aliases for existing private build environments.
  */
-if (process.env.ED_SIGNTOOL_SUBJECT_NAME && process.env.ED_SIGNTOOL_THUMBPRINT) {
-    config.win.signtoolOptions!.certificateSubjectName = process.env.ED_SIGNTOOL_SUBJECT_NAME;
-    config.win.signtoolOptions!.certificateSha1 = process.env.ED_SIGNTOOL_THUMBPRINT;
+const signingSubjectName =
+    process.env.SEVENTWOS_WORKSPACE_SIGNTOOL_SUBJECT_NAME ?? process.env.ED_SIGNTOOL_SUBJECT_NAME;
+const signingThumbprint = process.env.SEVENTWOS_WORKSPACE_SIGNTOOL_THUMBPRINT ?? process.env.ED_SIGNTOOL_THUMBPRINT;
+if (signingSubjectName && signingThumbprint) {
+    config.win.signtoolOptions!.certificateSubjectName = signingSubjectName;
+    config.win.signtoolOptions!.certificateSha1 = signingThumbprint;
     config.extraMetadata.electron_windows_cert_sn = config.win.signtoolOptions!.certificateSubjectName;
 }
 
@@ -240,10 +242,11 @@ if (os.platform() === "linux") {
 
     /**
      * Allow specifying deb changelog via env var
-     * @param {string} process.env.ED_DEB_CHANGELOG
+     * Legacy ED_DEBIAN_CHANGELOG remains a fallback alias for existing private build environments.
      */
-    if (process.env.ED_DEBIAN_CHANGELOG) {
-        config.deb.fpm.push(`--deb-changelog=${process.env.ED_DEBIAN_CHANGELOG}`);
+    const debianChangelog = process.env.SEVENTWOS_WORKSPACE_DEBIAN_CHANGELOG ?? process.env.ED_DEBIAN_CHANGELOG;
+    if (debianChangelog) {
+        config.deb.fpm.push(`--deb-changelog=${debianChangelog}`);
     }
 
     if (process.env.SQLCIPHER_BUNDLED) {
