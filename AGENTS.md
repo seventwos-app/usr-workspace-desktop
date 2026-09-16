@@ -6,18 +6,22 @@ adds the things that are easy to get wrong here.
 
 ## Repository layout
 
-A pnpm + nx monorepo (`element-web-monorepo`). Workspaces are `apps/*`, `packages/*`, `modules` and `modules/*`.
+A pnpm + nx monorepo forked from Element Web. Workspaces are `apps/*`, `packages/*`, and `modules/*`.
 
-| Path                                                                                                  | Contents                                                                                                      |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `apps/web`                                                                                            | The Element Web app. Also hosts view models (`src/viewmodels/`) and the Playwright e2e suite (`playwright/`). |
-| `apps/desktop`                                                                                        | Element Desktop.                                                                                              |
-| `packages/shared-components`                                                                          | Published UI component library, `@element-hq/web-shared-components`. New views go here.                       |
-| `packages/module-api`, `packages/shared-utils`, `packages/shared-types`, `packages/playwright-common` | Published support packages.                                                                                   |
-| `modules/*`                                                                                           | Optional runtime modules (banner, widget toggles, …).                                                         |
-| `docs/`                                                                                               | VitePress docs site.                                                                                          |
+This fork carries only the desktop application; the upstream `apps/web` package has been removed here (see
+[README.md](./README.md) for why). Do not reintroduce `apps/web` paths in scripts, docs, or config.
 
-There is **no** top-level `playwright/` directory; `docs/playwright.md` uses paths relative to `apps/web`.
+| Path                                                                                                  | Contents                                                                                 |
+| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `apps/desktop`                                                                                        | The Electron desktop app (Seventwos Workspace for Desktop). Source in `src/`, tests in `playwright/` and `vitest.config.ts`. |
+| `packages/shared-components`                                                                          | Published UI component library, `@element-hq/web-shared-components`.                      |
+| `packages/module-api`, `packages/shared-utils`, `packages/shared-types`, `packages/playwright-common` | Published support packages.                                                                |
+| `modules/*`                                                                                           | Optional runtime modules (banner, widget toggles, …).                                     |
+| `docs/`                                                                                               | VitePress docs site.                                                                       |
+
+`apps/desktop` does not build a webapp from source. It fetches a prebuilt Element Web bundle via
+`apps/desktop/scripts/fetch-package.ts` and packs it as `webapp.asar`. See
+[apps/desktop/README.md](./apps/desktop/README.md) for the fetch/build flow.
 
 ## Commands
 
@@ -31,7 +35,8 @@ Run from the repo root unless stated otherwise.
 | Typecheck                                              | `pnpm -r --workspace-concurrency=1 lint:types`    |
 | All unit tests                                         | `pnpm test:unit`                                  |
 | Regenerate i18n strings                                | `pnpm i18n`                                       |
-| Start the app                                          | `cd apps/web && pnpm start`                       |
+| Start the app                                          | `cd apps/desktop && pnpm start`                   |
+| Fetch webapp bundle                                    | `cd apps/desktop && pnpm fetch`                   |
 | Storybook                                              | `cd packages/shared-components && pnpm storybook` |
 
 Formatting is **oxfmt** and linting is **oxlint**. This repo does not use prettier or eslint — running prettier here
@@ -41,45 +46,37 @@ Run `pnpm i18n` after adding or changing any translated string.
 
 ## Running unit tests
 
-Both jest and vitest are in use; a migration to vitest is in progress. **The file path decides the runner.**
+`apps/desktop` uses vitest. Run it from within the package:
 
-| Test file                                      | Runner           | Command                                                     |
-| ---------------------------------------------- | ---------------- | ----------------------------------------------------------- |
-| `apps/web/test/**/*-test.[tj]s?(x)`            | jest             | `cd apps/web && pnpm jest <path>`                           |
-| `apps/web/src/**/*.test.{ts,tsx}`              | vitest           | `pnpm vitest run <path>`                                    |
-| `apps/web/src/**/*.test.browser.{ts,tsx}`      | vitest (browser) | `pnpm vitest run --project web-browser <path>`              |
-| `packages/shared-components/src/**/*.test.tsx` | vitest           | `cd packages/shared-components && pnpm test:unit -- <path>` |
+```sh
+cd apps/desktop && pnpm test:unit
+```
 
-Notes:
+For `packages/shared-components`, run `cd packages/shared-components && pnpm test:unit -- <path>`.
 
-- Write new tests as co-located vitest `*.test.ts(x)` next to the source file. The `apps/web/test/` jest tree is
-  legacy; extend it only when the file you are changing already lives there.
 - Vitest runs with `globals: false`, so import `describe`, `it`, `expect` and friends explicitly.
-- `packages/shared-components` is excluded from the root vitest config and must be run from its own directory.
-- "No test files found" means you picked the wrong runner or path. It is not a pass.
+- "No test files found" means you picked the wrong path. It is not a pass.
 - Prefer extending an existing test over adding a new file when covering a close variant of existing behaviour.
 
 ## Running e2e tests
 
-Specs live in `apps/web/playwright/e2e`. See [docs/playwright.md](./docs/playwright.md) for the full guide.
+Specs live in `apps/desktop/playwright`. See [docs/playwright.md](./docs/playwright.md) for the general Playwright
+setup this repo inherits.
 
 ```sh
-cd apps/web && pnpm test:playwright -- playwright/e2e/<spec>.spec.ts --project=Chrome
+cd apps/desktop && pnpm test:playwright -- <spec>.spec.ts --project=Chrome
 ```
 
-- Requires a container runtime (Docker/Podman/Colima) for the homeserver testcontainers.
 - On macOS, add `--ignore-snapshots`. Screenshot baselines are only committed for Linux, so comparisons fail locally.
-- Never run `pnpm test:playwright:screenshots` locally to "fix" a screenshot diff — it writes host-rendered baselines.
+- Never run the screenshots-update script locally to "fix" a screenshot diff — it writes host-rendered baselines.
   Screenshots are updated in the Docker environment, which CI matches.
-- The config uses `reuseExistingServer: true`. Check `lsof -ti:8080` first; a stale dev server silently serves the
-  tests. Port-bind errors are an infrastructure problem, not a test failure.
 - Locate elements by role, label and accessible name, not CSS classes.
 - Tag any test using `toMatchScreenshot` with `@screenshot`.
 
 ### Reviewing updated screenshots
 
 Updated baselines are part of the diff and must be reviewed, not accepted blindly. Before committing any changed
-`.png` under `apps/web/playwright/snapshots/` or `packages/shared-components/__vis__/`:
+`.png` under `apps/desktop/playwright` or `packages/shared-components/__vis__/`:
 
 - Look at the image. Confirm every visible difference is one your change was meant to produce.
 - Treat anything else as a regression until proven otherwise: shifted or clipped layout, changed spacing or font,
@@ -91,7 +88,7 @@ Updated baselines are part of the diff and must be reviewed, not accepted blindl
 
 ## Writing UI code: MVVM
 
-New UI follows MVVM. Full details in [docs/MVVM.md](./docs/MVVM.md); the shape for a feature `Foo`:
+New shared UI follows MVVM. Full details in [docs/MVVM.md](./docs/MVVM.md); the shape for a feature `Foo`:
 
 **View** — `packages/shared-components/src/<domain>/FooView/` containing `FooView.tsx`, `FooView.module.css`,
 `FooView.test.tsx`, `FooView.stories.tsx` and `index.ts`. The view declares the contract:
@@ -109,9 +106,6 @@ export function FooView({ vm }: { vm: FooViewModel }): JSX.Element {
 
 Views are dumb: they read the snapshot and call actions, nothing else. Develop them in Storybook.
 
-**ViewModel** — `apps/web/src/viewmodels/<domain>/FooViewModel.ts`, a class extending `BaseViewModel` that implements
-the interface from the view. `apps/web/src/components/viewmodels/` is the deprecated v1 location; do not add there.
-
 Rules that are easy to miss:
 
 - Define actions as arrow-function class properties (`public doThing = (): void => {}`) so `this` survives being
@@ -121,9 +115,6 @@ Rules that are easy to miss:
 - Track listeners and sub-view-models with `this.disposables.trackListener(...)` / `this.disposables.track(...)`.
 - A non-MVVM function component owning a view model should create it with `useCreateAutoDisposedViewModel`; a class
   component creates it in `componentDidMount` and disposes it in `componentWillUnmount`.
-
-Reference implementation: `packages/shared-components/src/room-list/RoomListSearchView/` with
-`apps/web/src/viewmodels/room-list/RoomListSearchViewModel.ts`.
 
 ## Code style
 
@@ -142,9 +133,10 @@ Read [code_style.md](./code_style.md). The points most often missed:
     */
     ```
 
-    The holder is `Element Creations Ltd.` **only for contributions made as part of Element**. An external
-    contributor puts their own name or their company's there instead. Note that `oxlint --fix` inserts the Element
-    line unconditionally, so external contributors should write the header by hand and check what the autofix added.
+    The holder is `Element Creations Ltd.` **only for contributions made as part of the inherited Element code**. An
+    external or Seventwos contributor puts their own name or their company's there instead. Note that `oxlint --fix`
+    inserts the Element line unconditionally, so contributors should write the header by hand and check what the
+    autofix added.
 
 - TypeScript only, named exports only — avoid `export default`.
 - 4-space indent, 120-column limit, double quotes, semicolons.
@@ -152,7 +144,7 @@ Read [code_style.md](./code_style.md). The points most often missed:
 - Avoid `any`; if unavoidable, comment why.
 - Roughly one interface, class or enum per file, named after the file.
 - Never mix cosmetic and functional changes.
-- **Styles:** `apps/web` uses PostCSS (`res/css/**/_Component.pcss`, `mx_`-prefixed classes).
+- **Styles:** `apps/desktop` uses PostCSS (`res/css/**/_Component.pcss`, `mx_`-prefixed classes).
   `packages/shared-components` uses CSS modules (`Component.module.css`, semantic camelCase class names, no `mx_`
   prefix) imported as `styles`. Use Compound design tokens (`var(--cpd-color-…)`, `var(--cpd-space-…)`) for all values.
 - Prefer Compound typography components over raw text elements, and `Flex`/`Box` from shared-components over raw
@@ -177,7 +169,7 @@ Keep comments short and relevant.
 
     ```sh
     pnpm test:unit --coverage                              # vitest, writes coverage/lcov.info
-    cd apps/web && pnpm coverage                           # jest only, writes apps/web/coverage/lcov.info
+    cd apps/desktop && pnpm coverage                       # writes apps/desktop/coverage/lcov.info
     cd packages/shared-components && pnpm coverage
     pnpm coverage:diff                                     # from the root, needs diff_cover installed
     ```
