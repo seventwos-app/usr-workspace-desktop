@@ -231,8 +231,10 @@ app.on("ready", async () => {
 
     if (!args.update) {
         console.log("Auto update disabled via command line flag");
-    } else if (config.update_base_url) {
+    } else if (config.enable_auto_update && config.update_base_url) {
         void updater.start(config.update_base_url);
+    } else if (config.update_base_url) {
+        console.log("Auto update endpoint is configured but enable_auto_update is not true: auto update is disabled");
     } else {
         console.log("No update_base_url is defined: auto update is disabled");
     }

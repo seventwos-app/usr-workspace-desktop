@@ -4,7 +4,7 @@ set -e
 
 cd $(dirname "$0")/..
 
-IMAGE=${DOCKER_IMAGE_NAME:-"element-desktop-dockerbuild"}
+IMAGE=${DOCKER_IMAGE_NAME:-"seventwos-workspace-desktop-build"}
 
 docker inspect "$IMAGE" 2> /dev/null > /dev/null
 if [ $? != 0 ]; then

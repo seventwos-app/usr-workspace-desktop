@@ -14,44 +14,26 @@ Before you do anything else, fetch the dependencies:
 pnpm install
 ```
 
-# Fetching the upstream web bundle
+# Providing the upstream web bundle
 
-Since this package is an Electron wrapper, it does not contain the upstream web bundle. Fetch a compatible web bundle before building:
-
-```
-# Fetch the compatible prebuilt upstream package. The version
-# fetched will be the same as the local element-desktop package.
-# We're explicitly asking for no config, so the packaged app will have no config.json.
-pnpm run fetch --noverify --cfgdir ""
-```
-
-...or if you'd like to use GPG to verify the downloaded package:
+This repository deliberately does not contain `apps/web`. The Electron wrapper is not independent of a web UI bundle:
+every build must opt in to an exact upstream release or provide a separately verified bundle.
 
 ```
-# Fetch the upstream public key over a secure connection and import
-# it into your local GPG keychain (you'll need GPG installed). You only need to to do this
-# once.
+# Fetch and verify an exact signed upstream release, then apply the Seventwos release config.
+pnpm run fetch --cfgdir seventwos.org/release v1.12.27
+```
+
+Importing the upstream release key is a separate, explicit operation:
+
+```
 pnpm run fetch --importkey
-# Fetch the package and verify the signature
-pnpm run fetch --cfgdir ""
 ```
 
-...or either of the above, but fetching a specific upstream version:
+Custom HTTPS bundle URLs are supported for local work, but the fetch script cannot authenticate them. Verify the
+bundle independently before use. Release CI instead requires both an exact HTTPS URL and SHA-256 digest.
 
-```
-# Fetch the compatible prebuilt upstream package. The version
-# fetched will be the same as the local element-desktop package.
-pnpm run fetch --noverify --cfgdir "" v1.5.6
-```
-
-If you only want to run the app locally and don't need to build packages, you can
-provide the `webapp` directory directly:
-
-```
-ln -s ../web/webapp ./
-```
-
-[TODO: add support for fetching develop builds, arbitrary URLs and arbitrary paths]
+Moving `develop` bundles and implicit version selection are rejected. Do not add or depend on `apps/web`.
 
 # Building
 
@@ -111,13 +93,31 @@ cp /path/to/my/config.json myconfig/
 pnpm run fetch --cfgdir myconfig
 ```
 
-Do not use the configuration directory for the official Element app: it can cause the app to use Element's update channel.
+The checked-in Seventwos variants intentionally provide no homeserver, identity server, telemetry, rageshake, maps,
+call, or Scalar endpoints. Add only operated Seventwos services in an explicit config. The planned update endpoint is
+`https://workspace.seventwos.org/desktop/update/`, but automatic updates remain disabled unless
+`enable_auto_update` is deliberately set to `true` after that service is operational.
+
+# Release readiness workflow
+
+`Build Seventwos Desktop Artifacts` is manual and artifact-only. It requires an exact upstream web bundle HTTPS URL
+and SHA-256 digest, builds unsigned packages, and never publishes them. It has no release-event trigger, deployment
+permissions, Element credentials, Element package-service integration, or inherited secret access.
+
+`Desktop Validation` is the required release-branch, PR, and merge-queue safety gate. It runs desktop source and script
+type checks, validates the remaining workflow definitions and checked-in Seventwos JSON configs, and runs the desktop
+unit suite. It does not fetch a web bundle, package applications, sign artifacts, publish releases, or contact
+deployment services.
+
+No signing secrets are accepted because Seventwos does not yet have Apple or Windows signing accounts. When those
+accounts exist, add signing in a reviewed change using protected environments and Seventwos-prefixed secrets only.
+Do not add credentials to this repository.
 
 # Profiles
 
 To run multiple instances of the desktop app for different accounts, you can
 launch the executable with the `--profile` argument followed by a unique
-identifier, e.g `element-desktop --profile Work` for it to run a separate profile and
+identifier, e.g `seventwos-workspace-desktop --profile Work` for it to run a separate profile and
 not interfere with the default one.
 
 Alternatively, a custom location for the profile data can be specified using the

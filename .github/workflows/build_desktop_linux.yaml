@@ -68,15 +68,14 @@ env:
     # which the system-sqlcipher variant needs. Debian bookworm (2.36) and newer are a superset.
     # Currently, our newest linked glibc version is 2.34 in Seshat, Electron only links against 2.25.
     MAX_GLIBC: 2.34
-permissions: {} # No permissions required
+permissions:
+    contents: read
 jobs:
     build:
         name: Build Linux ${{ inputs.arch }} SQLCipher ${{ inputs.sqlcipher }}
         # We build on native infrastructure as matrix-seshat fails to cross-compile properly
         # https://github.com/matrix-org/seshat/issues/135
         runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
-        env:
-            HAK_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env:${{ case(github.event_name == 'push', inputs.ref || github.ref_name, github.event_name == 'release', 'staging', 'develop') }}
         steps:
             - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
               id: config
@@ -96,7 +95,6 @@ jobs:
 
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
-                  repository: element-hq/element-web
                   ref: ${{ inputs.ref }}
                   persist-credentials: false
 
@@ -124,36 +122,15 @@ jobs:
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile --filter element-desktop"
-
-            - name: "Get modified files"
-              id: changed_files
-              if: steps.cache.outputs.cache-hit != 'true' && github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
-              uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47
-              with:
-                  files: |
-                      apps/desktop/dockerbuild/**
-
-            # This allows contributors to test changes to the dockerbuild image within a pull request
-            - name: Build docker image
-              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
-              if: steps.changed_files.outputs.any_modified == 'true' || github.event_name == 'merge_group'
-              with:
-                  file: apps/desktop/dockerbuild/Dockerfile
-                  context: apps/desktop
-                  load: true
-                  platforms: linux/${{ inputs.arch }}
-                  tags: ${{ env.HAK_DOCKER_IMAGE }}
+              run: "pnpm install --frozen-lockfile --filter seventwos-workspace-desktop"
 
             - name: Build Natives
               if: steps.cache.outputs.cache-hit != 'true'
+              working-directory: apps/desktop
               run: |
-                  docker run \
-                    -v ${{ github.workspace }}:/work -w /work \
-                    -e SQLCIPHER_BUNDLED \
-                    -e CI=1 \
-                    $HAK_DOCKER_IMAGE \
-                    pnpm -C apps/desktop run build:native
+                  rustup toolchain install stable --profile minimal --no-self-update
+                  rustup default stable
+                  pnpm run build:native
 
             - name: Fix permissions
               run: |
@@ -215,7 +192,7 @@ jobs:
                       assert_contains_string "$LIBS" "libsqlcipher.so.0"
                   fi
 
-                  ./scripts/glibc-check.sh dist/linux-*unpacked/element-desktop*
+                  ./scripts/glibc-check.sh dist/linux-*unpacked/seventwos-workspace-desktop*
               env:
                   ARCH: ${{ steps.config.outputs.arch }}
 
@@ -233,9 +210,9 @@ jobs:
               if: contains(inputs.targets, 'deb')
               working-directory: apps/desktop
               run: |
-                  test -f ./dist/element-desktop*$ARCH.deb
+                  test -f ./dist/seventwos-workspace-desktop*$ARCH.deb
 
-                  DEB_LISTING=$(dpkg-deb --fsys-tarfile ./dist/element-desktop*.deb | tar -tv)
+                  DEB_LISTING=$(dpkg-deb --fsys-tarfile ./dist/seventwos-workspace-desktop*.deb | tar -tv)
                   echo "deb listing: "
                   echo "$DEB_LISTING"
                   ! echo "$DEB_LISTING" | grep '^h'
@@ -246,9 +223,9 @@ jobs:
               if: contains(inputs.targets, 'tar.gz')
               working-directory: apps/desktop
               run: |
-                  test -f ./dist/element-desktop*.tar.gz
+                  test -f ./dist/seventwos-workspace-desktop*.tar.gz
 
-                  TAR_GZ_LISTING=$(tar -tvf ./dist/element-desktop*.tar.gz)
+                  TAR_GZ_LISTING=$(tar -tvf ./dist/seventwos-workspace-desktop*.tar.gz)
                   echo "tar.gz listing: "
                   echo "$TAR_GZ_LISTING"
                   ! echo "$TAR_GZ_LISTING" | grep '^h'
@@ -262,7 +239,7 @@ jobs:
             project: linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             runs-on: ${{ inputs.runs-on || (inputs.sqlcipher == 'system' && (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04')) }}
-            executable: /opt/Element*/element-desktop*
+            executable: /opt/Seventwos*/seventwos-workspace-desktop*
             prepare_cmd: |
                 sudo apt-get -qq update
                 sudo apt install ./dist/*.deb

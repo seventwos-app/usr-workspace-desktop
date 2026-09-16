@@ -1,7 +1,6 @@
 {
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
-    "implicitDependencies": ["element-web"],
     "root": "apps/desktop",
     "targets": {
         "docker:build": {
@@ -15,7 +14,7 @@
                 "context": "{projectRoot}",
                 "file": "{projectRoot}/dockerbuild/Dockerfile",
                 "metadata": {
-                    "images": ["ghcr.io/element-hq/element-web/desktop-build-env"],
+                    "images": ["seventwos-workspace-desktop-build"],
                     "tags": ["type=ref,event=branch"]
                 }
             }
@@ -61,7 +60,7 @@
             "options": {
                 "commands": [
                     "pnpm run build -l --x64 --dir --publish=never",
-                    "pnpm exec electron-fuses write --app ./dist/linux-unpacked/element-desktop EnableNodeCliInspectArguments=on"
+                    "pnpm exec electron-fuses write --app ./dist/linux-unpacked/seventwos-workspace-desktop EnableNodeCliInspectArguments=on"
                 ],
                 "parallel": false,
                 "cwd": "apps/desktop"
@@ -70,12 +69,12 @@
         },
         "test:playwright:screenshots:build-docker": {
             "cache": true,
-            "command": "docker build -f playwright/Dockerfile -t element-desktop-playwright --platform linux/amd64 ../..",
+            "command": "docker build -f playwright/Dockerfile -t seventwos-workspace-desktop-playwright --platform linux/amd64 ../..",
             "inputs": ["{projectRoot}/playwright/Dockerfile", "{projectRoot}/playwright/docker-entrypoint.sh"],
             "options": { "cwd": "apps/desktop" }
         },
         "test:playwright:screenshots": {
-            "command": "docker run --rm --network host -v $(pwd)/../../:/work/ --platform linux/amd64 -it element-desktop-playwright",
+            "command": "docker run --rm --network host -v $(pwd)/../../:/work/ --platform linux/amd64 -it seventwos-workspace-desktop-playwright",
             "options": { "cwd": "apps/desktop" },
             "dependsOn": ["test:playwright:screenshots:*"]
         }

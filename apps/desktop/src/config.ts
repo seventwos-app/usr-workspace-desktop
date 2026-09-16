@@ -12,7 +12,12 @@ import { type ResolveDefaults, type DesktopConfigJson, type JsonDocument } from 
 import { getAsarPath } from "./asar.js";
 import { loadJsonFile } from "./utils.js";
 
-export type ConfigOptions = ResolveDefaults<DesktopConfigJson, typeof DEFAULTS>;
+type SeventwosDesktopConfigJson = DesktopConfigJson & {
+    enable_auto_update?: boolean;
+};
+
+export type ConfigOptions = ResolveDefaults<DesktopConfigJson, typeof DEFAULTS> &
+    Pick<SeventwosDesktopConfigJson, "enable_auto_update">;
 
 const ConfigFilename = "config.json";
 
@@ -32,16 +37,15 @@ function loadLocalConfigFile(location: string | undefined): JsonDocument {
 }
 
 const DEFAULTS = {
-    brand: "Element",
-    help_url: "https://element.io/help",
-    web_base_url: "https://app.element.io/",
+    brand: "Seventwos Workspace",
+    help_url: "https://workspace.seventwos.org",
+    web_base_url: "https://workspace.seventwos.org",
 } satisfies DesktopConfigJson;
 
-function applyDefaults(conf: DesktopConfigJson): asserts conf is ConfigOptions {
-    for (const k in DEFAULTS) {
-        const key = k as keyof typeof DEFAULTS;
-        conf[key] ||= DEFAULTS[key];
-    }
+function applyDefaults(conf: SeventwosDesktopConfigJson): asserts conf is ConfigOptions {
+    conf.brand ||= DEFAULTS.brand;
+    conf.help_url ||= DEFAULTS.help_url;
+    conf.web_base_url ||= DEFAULTS.web_base_url;
 }
 
 let loadConfigPromise: Promise<ConfigOptions> | undefined;
@@ -56,7 +60,7 @@ export function loadConfig(localConfigPath: string | undefined): Promise<ConfigO
         try {
             console.log(`Loading app config: ${path.join(asarPath, ConfigFilename)}`);
             // XXX: we trust that we built the package with a sane config, but should use something like zod here in future
-            const loadedConfig = loadJsonFile(asarPath, ConfigFilename) as unknown as DesktopConfigJson;
+            const loadedConfig = loadJsonFile(asarPath, ConfigFilename) as unknown as SeventwosDesktopConfigJson;
             applyDefaults(loadedConfig);
             config = loadedConfig;
         } catch {

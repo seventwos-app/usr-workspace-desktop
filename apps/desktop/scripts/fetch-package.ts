@@ -18,7 +18,6 @@ import { setPackageVersion } from "./set-version.ts";
 
 const PUB_KEY_URL = "https://packages.riot.im/element-release-key.asc";
 const PACKAGE_URL_PREFIX = "https://github.com/element-hq/element-web/releases/download/";
-const DEVELOP_TGZ_URL = "https://develop.element.io/develop.tar.gz";
 const ASAR_PATH = "webapp.asar";
 
 async function downloadToFile(url: string, filename: string): Promise<void> {
@@ -89,20 +88,24 @@ async function main(): Promise<number | undefined> {
     }
 
     if (targetVersion === undefined) {
-        targetVersion = "v" + riotDesktopPackageJson.version;
-    } else if (targetVersion !== "develop") {
-        setVersion = true; // version was specified
+        console.error("An explicit upstream release tag or HTTPS bundle URL is required.");
+        console.error(`For the matching upstream release, pass v${riotDesktopPackageJson.version}.`);
+        return 1;
     }
 
     if (targetVersion === "develop") {
-        filename = "develop.tar.gz";
-        url = DEVELOP_TGZ_URL;
-        verify = false; // develop builds aren't signed
+        console.error("The moving 'develop' bundle is not supported. Select an immutable release tag.");
+        return 1;
     } else if (targetVersion.includes("://")) {
+        if (!targetVersion.startsWith("https://")) {
+            console.error("Custom bundle URLs must use HTTPS.");
+            return 1;
+        }
         filename = targetVersion.substring(targetVersion.lastIndexOf("/") + 1);
         url = targetVersion;
         verify = false; // manually verified
     } else {
+        setVersion = true;
         filename = `element-${targetVersion}.tar.gz`;
         url = PACKAGE_URL_PREFIX + targetVersion + "/" + filename;
     }

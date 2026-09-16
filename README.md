@@ -19,9 +19,10 @@ standalone client, `apps/web` (the browser application) has been removed. The la
 - `packages/` and `modules/` — shared libraries and optional modules used to build `apps/desktop`.
 
 The desktop app packages a pre-built web UI bundle at build time rather than compiling one locally in
-this repository — see `apps/desktop/scripts/fetch-package.ts`. Today that script fetches the upstream
-Element Web release; pointing it at a Seventwos-authored web build is part of the ongoing transition
-away from inherited Element code.
+this repository — see `apps/desktop/scripts/fetch-package.ts`. The dependency is explicit rather than
+independent: local builds require an exact upstream release tag, and release-readiness CI requires an
+exact HTTPS bundle URL plus SHA-256 digest. The repository does not contain or restore `apps/web`.
+Replacing the inherited web bundle with a Seventwos-authored bundle remains future work.
 
 ## Status
 

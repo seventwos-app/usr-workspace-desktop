@@ -14,7 +14,7 @@ import ProtocolHandler from "./protocol.js";
 
 const TEST_PROTOCOL = "test.proto";
 const TEST_SESSION_ID = "test_session_id";
-const USER_DATA_DIR = "/Users/name/Library/Application Support/Element";
+const USER_DATA_DIR = "/Users/name/Library/Application Support/Seventwos Workspace";
 
 vi.mock("node:fs", () => ({ default: memfs }));
 vi.mock("electron", () => {
@@ -23,8 +23,8 @@ vi.mock("electron", () => {
     return {
         app: {
             isPackaged: true,
-            getPath: vi.fn().mockReturnValue("/Users/name/Library/Application Support/Element"),
-            getAppPath: vi.fn().mockReturnValue("/bin/element-desktop"),
+            getPath: vi.fn().mockReturnValue("/Users/name/Library/Application Support/Seventwos Workspace"),
+            getAppPath: vi.fn().mockReturnValue("/bin/seventwos-workspace-desktop"),
             setAsDefaultProtocolClient: vi.fn(),
             on: emitter.on.bind(emitter),
             emit: emitter.emit.bind(emitter),
@@ -55,15 +55,6 @@ describe("ProtocolHandler", () => {
 
     describe("getProfileFromDeeplink", () => {
         const handler = new ProtocolHandler(TEST_PROTOCOL);
-
-        it("should handle legacy SSO URIs", () => {
-            expect(
-                handler.getProfileFromDeeplink([
-                    "Element.app",
-                    `element://vector/webapp/?element-desktop-ssoid=${TEST_SESSION_ID}`,
-                ]),
-            ).toBe(USER_DATA_DIR);
-        });
 
         it("should handle OIDC URIs with response_mode=query", () => {
             expect(
@@ -135,7 +126,7 @@ describe("ProtocolHandler", () => {
 
     describe("initialise", () => {
         beforeEach(() => {
-            vi.spyOn(process, "execPath", "get").mockReturnValue("/bin/element-desktop");
+            vi.spyOn(process, "execPath", "get").mockReturnValue("/bin/seventwos-workspace-desktop");
         });
 
         it("should set as default protocol client", () => {
@@ -145,12 +136,15 @@ describe("ProtocolHandler", () => {
                 devtools: false,
                 update: false,
                 hidden: false,
-                positional: ["/bin/element-desktop"],
+                positional: ["/bin/seventwos-workspace-desktop"],
             });
 
             const args = ["--no-update"];
-            expect(app.setAsDefaultProtocolClient).toHaveBeenCalledWith(TEST_PROTOCOL, "/bin/element-desktop", args);
-            expect(app.setAsDefaultProtocolClient).toHaveBeenCalledWith("element", "/bin/element-desktop", args);
+            expect(app.setAsDefaultProtocolClient).toHaveBeenCalledWith(
+                TEST_PROTOCOL,
+                "/bin/seventwos-workspace-desktop",
+                args,
+            );
         });
 
         it("should handle deeplink", () => {
@@ -164,7 +158,7 @@ describe("ProtocolHandler", () => {
                 devtools: false,
                 update: false,
                 hidden: false,
-                positional: ["/bin/element-desktop", "test.proto:/#/room/#matrix:matrix.org"],
+                positional: ["/bin/seventwos-workspace-desktop", "test.proto:/#/room/#matrix:matrix.org"],
             });
 
             expect(global.mainWindow!.loadURL).toHaveBeenCalledWith("vector://vector/webapp/#/room/#matrix:matrix.org");

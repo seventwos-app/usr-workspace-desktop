@@ -1,10 +1,10 @@
 {
-    "name": "element-desktop",
-    "productName": "Element",
+    "name": "seventwos-workspace-desktop",
+    "productName": "Seventwos Workspace",
     "main": "lib/electron-main.js",
     "exports": "./lib/electron-main.js",
     "version": "1.12.27",
-    "description": "Element: the future of secure communication",
+    "description": "Seventwos Workspace desktop client",
     "author": {
         "name": "Seventwos"
     },
@@ -41,10 +41,10 @@
         "build:64": "nx build --x64",
         "build:universal": "nx build --universal",
         "build": "nx build --",
-        "docker:setup": "docker build --platform linux/amd64 -t element-desktop-dockerbuild -f dockerbuild/Dockerfile .",
+        "docker:setup": "docker build --platform linux/amd64 -t seventwos-workspace-desktop-build -f dockerbuild/Dockerfile .",
         "docker:build:native": "scripts/in-docker.sh pnpm run hak",
         "docker:build": "scripts/in-docker.sh pnpm run build",
-        "docker:install": "scripts/in-docker.sh pnpm install --filter=element-desktop --frozen-lockfile",
+        "docker:install": "scripts/in-docker.sh pnpm install --filter=seventwos-workspace-desktop --frozen-lockfile",
         "clean": "rimraf webapp.asar dist packages deploys lib",
         "hak": "node scripts/hak/index.ts",
         "test:unit": "vitest",
