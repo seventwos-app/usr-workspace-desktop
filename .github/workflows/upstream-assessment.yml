@@ -33,8 +33,17 @@ jobs:
 
             - name: Validate selective upstream policy
               env:
-                  BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
-              run: python3 scripts/upstream/validate_policy.py --base-ref "$BASE_REF"
+                  EVENT_NAME: ${{ github.event_name }}
+                  PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+              run: |
+                  if [[ "$EVENT_NAME" == "pull_request" ]]; then
+                      BASE_REF="$PR_BASE_SHA"
+                  else
+                      BASE_REF="$(git rev-parse HEAD^)"
+                  fi
+                  python3 scripts/upstream/validate_policy.py \
+                      --base-ref "$BASE_REF" \
+                      --allow-ledger-introduction
 
             - name: Generate read-only assessment
               run: |
