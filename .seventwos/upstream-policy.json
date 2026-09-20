@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "policyId": "desktop-selective-upstream-v1",
+  "repository": "seventwos-app/usr-workspace-desktop",
+  "integrationModel": "desktop-shell-plus-separately-pinned-element-web-bundle",
+  "upstream": {
+    "repository": "element-hq/element-web",
+    "assessmentBranch": "develop",
+    "sourceUrl": "https://github.com/element-hq/element-web",
+    "bundleReleaseUrlPrefix": "https://github.com/element-hq/element-web/releases/download/"
+  },
+  "selection": {
+    "movingRefsForbidden": [
+      "develop",
+      "main",
+      "master",
+      "latest",
+      "nightly"
+    ],
+    "requiredBundleFields": [
+      "tag",
+      "url",
+      "sha256",
+      "signature",
+      "provenance",
+      "rollback"
+    ],
+    "requiredEvidence": [
+      "capabilityDenial",
+      "networkDestinations",
+      "visual",
+      "existingProfileMigration"
+    ],
+    "humanApprovalRequired": true
+  },
+  "protectedDivergence": {
+    "description": "Seventwos UI, product identity, endpoint policy, authentication, storage, profile migration, and release behavior are repository-owned and must not be overwritten by upstream.",
+    "pathMap": ".seventwos/upstream-path-map.json",
+    "codeowners": "CODEOWNERS"
+  },
+  "ledger": {
+    "path": ".seventwos/upstream-ledger.jsonl",
+    "appendOnly": true
+  }
+}

@@ -1,0 +1,58 @@
+name: Assess Element Web upstream
+
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "17 6 * * 1"
+    pull_request:
+        branches:
+            - develop
+        paths:
+            - ".seventwos/**"
+            - "scripts/upstream/**"
+            - ".github/workflows/upstream-assessment.yml"
+            - ".github/workflows/build_desktop_prepare.yaml"
+            - "CODEOWNERS"
+
+permissions:
+    contents: read
+
+concurrency:
+    group: upstream-assessment-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    report:
+        name: Validate policy and report upstream tip
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Validate selective upstream policy
+              env:
+                  BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
+              run: python3 scripts/upstream/validate_policy.py --base-ref "$BASE_REF"
+
+            - name: Generate read-only assessment
+              run: |
+                  python3 scripts/upstream/report_assessment.py --output upstream-assessment.json
+                  {
+                    echo '## Selective upstream assessment'
+                    echo
+                    echo '```json'
+                    cat upstream-assessment.json
+                    echo '```'
+                  } >> "$GITHUB_STEP_SUMMARY"
+
+            - name: Assert report-only behavior
+              run: |
+                  test -z "$(git status --short --untracked-files=no)"
+                  jq -e '
+                    .mode == "report-only" and
+                    .actions.changesApplied == false and
+                    .actions.bundleSelectionModified == false and
+                    .actions.mergeAttempted == false
+                  ' upstream-assessment.json

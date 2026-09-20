@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "mappings": [
+    {
+      "upstream": "apps/web/**",
+      "local": null,
+      "mode": "forbidden",
+      "reason": "The browser application is supplied only as a separately pinned release bundle."
+    },
+    {
+      "upstream": "apps/desktop/**",
+      "local": "apps/desktop/**",
+      "mode": "selective-review",
+      "reason": "Desktop shell fixes may be assessed individually without importing upstream history wholesale."
+    },
+    {
+      "upstream": "packages/**",
+      "local": "packages/**",
+      "mode": "selective-review",
+      "reason": "Only dependencies required by accepted desktop-shell changes may be considered."
+    },
+    {
+      "upstream": "modules/**",
+      "local": "modules/**",
+      "mode": "protected-divergence",
+      "reason": "Seventwos product modules and presentation are repository-owned."
+    },
+    {
+      "upstream": ".github/workflows/**",
+      "local": ".github/workflows/**",
+      "mode": "protected-divergence",
+      "reason": "CI, release, and policy automation are repository-owned."
+    },
+    {
+      "upstream": "none",
+      "local": "apps/desktop/seventwos.org/**",
+      "mode": "protected-divergence",
+      "reason": "Brand, endpoint, feature, and release configuration encode Seventwos product intent."
+    },
+    {
+      "upstream": "none",
+      "local": ".seventwos/**",
+      "mode": "protected-divergence",
+      "reason": "Selective synchronization policy and evidence are repository-owned."
+    }
+  ]
+}

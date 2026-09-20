@@ -47,6 +47,9 @@ jobs:
                   [[ "$WEB_BUNDLE_SHA256" =~ ^[[:xdigit:]]{64}$ ]]
                   test -f "apps/desktop/$CONFIG/build.json"
                   test -f "apps/desktop/$CONFIG/config.json"
+                  python3 scripts/upstream/validate_policy.py \
+                      --selection-url "$WEB_BUNDLE_URL" \
+                      --selection-sha256 "$WEB_BUNDLE_SHA256"
 
             - name: Install desktop dependencies
               run: pnpm install --frozen-lockfile --filter seventwos-workspace-desktop

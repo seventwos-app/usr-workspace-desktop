@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "policyId": "desktop-selective-upstream-v1",
+  "status": "baseline-pending-human-review",
+  "repositoryBase": {
+    "branch": "develop",
+    "commit": "2de7d87f36839e814b7bbf74da2d723a94dfb3e6"
+  },
+  "lastAssessedUpstream": {
+    "branch": "develop",
+    "commit": null,
+    "assessedAt": null
+  },
+  "baselineCandidateEvidence": ".seventwos/evidence/baseline-element-web-v1.12.27.json",
+  "selectedBundle": null,
+  "humanReview": {
+    "required": true,
+    "status": "pending",
+    "reason": "Product intent for the inherited Element Web bundle has not been classified against Seventwos requirements."
+  }
+}
