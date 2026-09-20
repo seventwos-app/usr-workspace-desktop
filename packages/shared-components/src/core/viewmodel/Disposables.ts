@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { EventEmitter } from "events";
+import type { EventEmitter } from "node:events";
 
 /**
  * Something that needs to be eventually disposed. This can be:
