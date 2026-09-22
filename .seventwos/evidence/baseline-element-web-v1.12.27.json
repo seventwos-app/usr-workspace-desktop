@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "baseline-element-web-v1.12.27",
+  "immutable": true,
+  "recordedAt": "2026-09-20T12:29:12Z",
+  "candidate": {
+    "tag": "v1.12.27",
+    "url": "https://github.com/element-hq/element-web/releases/download/v1.12.27/element-v1.12.27.tar.gz",
+    "sha256": "0b3a3e3211155dbed31fad1413d09972edd3ce715e778189b1ad460a56e28bb8",
+    "signature": {
+      "url": "https://github.com/element-hq/element-web/releases/download/v1.12.27/element-v1.12.27.tar.gz.asc",
+      "sha256": "80697461e9ba90816ec50dc681df559eeb25223d19280934b2ce910383ef81b0",
+      "keyUrl": "https://packages.riot.im/element-release-key.asc",
+      "keySha256": "b6683a2383d6dd34ab571622c90e71fb05451af4310421ec15327a8b04347b98",
+      "status": "pending",
+      "detail": "Detached signature and key were captured, but cryptographic verification was not completed because GPG was unavailable."
+    },
+    "provenance": {
+      "repository": "element-hq/element-web",
+      "releaseUrl": "https://github.com/element-hq/element-web/releases/tag/v1.12.27",
+      "releaseId": 378370013,
+      "annotatedTagSha": "f2c43d5f70c350c6f50fc2e4e3403fdf46396fad",
+      "commitSha": "6dffa5058057e7a0edf2e6270598d7c27d2030cb",
+      "tagVerification": "verified",
+      "assetDigestSource": "GitHub release API and locally computed SHA-256",
+      "status": "passed"
+    },
+    "rollback": {
+      "strategy": "Restore the previously approved selectedBundle object and append a rollback event to the ledger; never retarget an existing tag or URL.",
+      "knownGoodEvidenceId": null,
+      "status": "pending"
+    }
+  },
+  "evidence": {
+    "capabilityDenial": {
+      "status": "pending",
+      "artifacts": [],
+      "requiredClaims": [
+        "No unapproved calling, widgets, integrations, telemetry, rageshake, maps, or update capability is enabled."
+      ]
+    },
+    "networkDestinations": {
+      "status": "pending",
+      "artifacts": [],
+      "requiredClaims": [
+        "Observed runtime destinations match the reviewed Seventwos allowlist."
+      ]
+    },
+    "visual": {
+      "status": "pending",
+      "artifacts": [],
+      "requiredClaims": [
+        "Screenshots show Seventwos identity and no unintended Element product presentation."
+      ]
+    },
+    "existingProfileMigration": {
+      "status": "pending",
+      "artifacts": [],
+      "requiredClaims": [
+        "Element and Riot profile migration preserves sessions, encrypted storage, and user data."
+      ]
+    }
+  },
+  "productIntent": {
+    "status": "unknown",
+    "humanReviewRequired": true,
+    "notes": "This baseline records what the current shell expects; it does not approve the inherited bundle as the Seventwos product."
+  },
+  "selection": {
+    "status": "not-selected",
+    "blockers": [
+      "Detached signature verification is pending.",
+      "Rollback has no approved known-good evidence ID.",
+      "Capability-denial evidence is pending.",
+      "Network-destination evidence is pending.",
+      "Visual evidence is pending.",
+      "Existing-profile migration evidence is pending.",
+      "Product intent is unknown and requires human review."
+    ]
+  }
+}

@@ -1,1 +1,30 @@
 * @a-tcp
+
+# Selective upstream policy, evidence, validators, and assessment automation.
+/.seventwos/ @a-tcp
+/scripts/upstream/ @a-tcp
+/.github/workflows/ @a-tcp
+
+# Desktop shell and separately pinned bundle selection.
+/apps/desktop/scripts/fetch-package.ts @a-tcp
+/apps/desktop/electron-builder.ts @a-tcp
+/apps/desktop/package.json @a-tcp
+
+# Seventwos UI and product divergence.
+/apps/desktop/seventwos.org/ @a-tcp
+/apps/desktop/build/ @a-tcp
+/modules/ @a-tcp
+/packages/ @a-tcp
+
+# Authentication, storage, and existing-profile migration.
+/apps/desktop/src/args.ts @a-tcp
+/apps/desktop/src/media-auth.ts @a-tcp
+/apps/desktop/src/protocol.ts @a-tcp
+/apps/desktop/src/store.ts @a-tcp
+/apps/desktop/src/seshat.ts @a-tcp
+
+# Release and packaging paths.
+/.github/workflows/build_desktop_*.yaml @a-tcp
+/.github/release-drafter.yml @a-tcp
+/apps/desktop/seventwos.org/release/ @a-tcp
+/apps/desktop/seventwos.org/preview/ @a-tcp

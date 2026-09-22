@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "invariants": [
+    {
+      "id": "no-apps-web",
+      "severity": "error",
+      "statement": "apps/web must remain absent from the repository."
+    },
+    {
+      "id": "immutable-bundle-only",
+      "severity": "error",
+      "statement": "A selected bundle must use an immutable release tag, exact HTTPS URL, and SHA-256 digest."
+    },
+    {
+      "id": "verified-selection-evidence",
+      "severity": "error",
+      "statement": "Signature, provenance, rollback, capability-denial, network-destination, visual, and existing-profile migration evidence must pass before selection."
+    },
+    {
+      "id": "protect-seventwos-divergence",
+      "severity": "error",
+      "statement": "Seventwos UI, product, auth, storage, profile migration, configuration, and release paths require repository ownership review."
+    },
+    {
+      "id": "assessment-only",
+      "severity": "error",
+      "statement": "Upstream assessment automation may report candidates but may not apply changes, merge, publish, or update bundle selection."
+    },
+    {
+      "id": "append-only-ledger",
+      "severity": "error",
+      "statement": "Existing upstream ledger entries may not be edited, reordered, or removed."
+    }
+  ]
+}

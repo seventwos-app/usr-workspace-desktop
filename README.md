@@ -24,6 +24,23 @@ independent: local builds require an exact upstream release tag, and release-rea
 exact HTTPS bundle URL plus SHA-256 digest. The repository does not contain or restore `apps/web`.
 Replacing the inherited web bundle with a Seventwos-authored bundle remains future work.
 
+## Selective upstream synchronization
+
+This repository is a desktop shell plus a separately pinned Element Web bundle, not a source fork that follows
+upstream branch history. Repository-owned policy under [`.seventwos/`](.seventwos/) defines the upstream path map,
+invariants, current selection state, immutable evidence, and append-only decision ledger.
+
+The upstream assessment workflow is read-only and report-only: it observes the `element-hq/element-web` `develop`
+tip and reports candidate state without applying changes, merging commits, or changing bundle selection. A bundle
+cannot be packaged until its exact release tag, HTTPS URL, SHA-256 digest, detached signature, provenance, rollback
+record, and required runtime evidence have passed human review. Required runtime evidence covers denied
+capabilities, network destinations, visual identity, and migration of existing Element and Riot profiles.
+
+The seeded `v1.12.27` record is baseline evidence, not an approved selection. Its product intent and runtime evidence
+remain pending human review, so packaging is intentionally blocked until the policy state names an approved bundle.
+`apps/web` must remain absent, moving branch bundles are forbidden, and Seventwos product divergence must not be
+overwritten during upstream assessment.
+
 ## Status
 
 This repository is in transition from its Element Web foundation to a separately authored Seventwos application layer.
