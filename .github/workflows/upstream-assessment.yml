@@ -7,12 +7,9 @@ on:
     pull_request:
         branches:
             - develop
-        paths:
-            - ".seventwos/**"
-            - "scripts/upstream/**"
-            - ".github/workflows/upstream-assessment.yml"
-            - ".github/workflows/build_desktop_prepare.yaml"
-            - "CODEOWNERS"
+    merge_group:
+        types:
+            - checks_requested
 
 permissions:
     contents: read
@@ -31,16 +28,23 @@ jobs:
                   fetch-depth: 0
                   persist-credentials: false
 
+            - name: Test upstream policy and workflow guards
+              run: python3 -m unittest discover -s scripts/upstream -p 'test_*.py' -v
+
             - name: Validate selective upstream policy
               env:
                   EVENT_NAME: ${{ github.event_name }}
                   PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+                  MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
               run: |
                   if [[ "$EVENT_NAME" == "pull_request" ]]; then
                       BASE_REF="$PR_BASE_SHA"
+                  elif [[ "$EVENT_NAME" == "merge_group" ]]; then
+                      BASE_REF="$MERGE_GROUP_BASE_SHA"
                   else
                       BASE_REF="$(git rev-parse HEAD^)"
                   fi
+                  test -n "$BASE_REF"
                   python3 scripts/upstream/validate_policy.py \
                       --base-ref "$BASE_REF" \
                       --allow-ledger-introduction
