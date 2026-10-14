@@ -29,7 +29,7 @@ jobs:
                   persist-credentials: false
 
             - name: Test upstream policy and workflow guards
-              run: python3 -m unittest discover -s scripts/upstream -p 'test_*.py' -v
+              run: python3 -B -m unittest discover -s scripts/upstream -p 'test_*.py' -v
 
             - name: Validate selective upstream policy
               env:
