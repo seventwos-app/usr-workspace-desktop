@@ -72,5 +72,9 @@ jobs:
                   }
                   NODE
 
+            # Electron lazily installs on import; prepare it before parallel test workers.
+            - name: Prepare Electron binary for unit tests
+              run: pnpm --filter seventwos-workspace-desktop exec install-electron
+
             - name: Run desktop unit tests
               run: pnpm --filter seventwos-workspace-desktop test:unit --run

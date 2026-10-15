@@ -31,7 +31,9 @@ upstream branch history. Repository-owned policy under [`.seventwos/`](.seventwo
 invariants, current selection state, immutable evidence, and append-only decision ledger.
 
 The upstream assessment workflow is read-only and report-only: it observes the `element-hq/element-web` `develop`
-tip and reports candidate state without applying changes, merging commits, or changing bundle selection. A bundle
+tip and reports candidate state without applying changes, merging commits, or changing bundle selection. It runs
+for every pull request targeting `develop` and merge-queue check request, as well as weekly and manual assessments.
+Pull requests and merge groups validate the append-only ledger against their event's base SHA. A bundle
 cannot be packaged until its exact release tag, HTTPS URL, SHA-256 digest, detached signature, provenance, rollback
 record, and required runtime evidence have passed human review. Required runtime evidence covers denied
 capabilities, network destinations, visual identity, and migration of existing Element and Riot profiles.
