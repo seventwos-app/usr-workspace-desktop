@@ -239,9 +239,10 @@ jobs:
             project: linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
+            container-image: ${{ inputs.sqlcipher == 'system' && 'node:24-bookworm' || '' }}
             executable: /opt/Seventwos*/seventwos-workspace-desktop*
             prepare_cmd: |
-                sudo apt-get -qq update
-                sudo apt install ./dist/*.deb
+                ${{ inputs.sqlcipher == 'system' && 'apt-get -qq update' || 'sudo apt-get -qq update' }}
+                ${{ inputs.sqlcipher == 'system' && 'apt-get install ./dist/*.deb' || 'sudo apt install ./dist/*.deb' }}
             blob_report: ${{ inputs.blob_report }}
             args: ${{ inputs.sqlcipher == 'system' && '--ignore-snapshots' || '' }} ${{ inputs.test-args }}
