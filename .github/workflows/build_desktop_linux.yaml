@@ -64,8 +64,8 @@ on:
                 default: "tar.gz deb"
 env:
     SQLCIPHER_BUNDLED: ${{ inputs.sqlcipher == 'static' && '1' || '' }}
-    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro that still ships libsqlcipher0,
-    # which the system-sqlcipher variant needs. Debian bookworm (2.36) and newer are a superset.
+    # Used by glibc-check.sh. The system-sqlcipher variant links to libsqlcipher0 on Jammy and Debian bookworm;
+    # newer Ubuntu releases use incompatible SQLCipher SONAMEs, so keep the existing glibc compatibility cap.
     # Currently, our newest linked glibc version is 2.34 in Seshat, Electron only links against 2.25.
     MAX_GLIBC: 2.34
 permissions:
@@ -238,10 +238,11 @@ jobs:
         with:
             project: linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
-            runs-on: ${{ inputs.runs-on || (inputs.sqlcipher == 'system' && (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04')) }}
+            runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
+            container-image: ${{ inputs.sqlcipher == 'system' && 'node:24-bookworm' || '' }}
             executable: /opt/Seventwos*/seventwos-workspace-desktop*
             prepare_cmd: |
-                sudo apt-get -qq update
-                sudo apt install ./dist/*.deb
+                ${{ inputs.sqlcipher == 'system' && 'apt-get -qq update' || 'sudo apt-get -qq update' }}
+                ${{ inputs.sqlcipher == 'system' && 'apt-get install ./dist/*.deb' || 'sudo apt install ./dist/*.deb' }}
             blob_report: ${{ inputs.blob_report }}
             args: ${{ inputs.sqlcipher == 'system' && '--ignore-snapshots' || '' }} ${{ inputs.test-args }}

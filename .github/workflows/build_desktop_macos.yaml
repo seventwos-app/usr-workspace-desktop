@@ -54,7 +54,7 @@ permissions:
 jobs:
     build:
         name: Build macOS Universal
-        runs-on: macos-26 # M1
+        runs-on: macos-26-intel
         steps:
             - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
               with:
@@ -86,7 +86,7 @@ jobs:
                   rustup target add aarch64-apple-darwin
                   rustup target add x86_64-apple-darwin
 
-            # M1 macos-14 comes without Python preinstalled
+            # Install Python for DMG badge generation.
             - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
               with:
                   python-version: "3.13"
@@ -149,7 +149,7 @@ jobs:
         with:
             project: macos
             artifact: ${{ inputs.artifact-prefix }}macos
-            runs-on: macos-14
+            runs-on: macos-26
             executable: /Users/runner/Applications/Seventwos\ Workspace*.app/Contents/MacOS/Seventwos\ Workspace*
             # We need to mount the DMG and copy the app to the Applications folder as a mounted DMG is
             # read-only and thus would not allow us to override the fuses as is required for Playwright.

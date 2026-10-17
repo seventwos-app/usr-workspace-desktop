@@ -6,6 +6,10 @@ on:
                 type: string
                 required: true
                 description: "The runner image to use"
+            container-image:
+                type: string
+                required: false
+                description: "Optional job container image for platform-specific test dependencies"
             artifact:
                 type: string
                 required: true
@@ -36,6 +40,7 @@ jobs:
     test:
         name: Test ${{ inputs.project }}
         runs-on: ${{ inputs.runs-on }}
+        container: ${{ inputs.container-image || null }}
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -50,6 +55,14 @@ jobs:
 
             - name: Install Deps
               run: "pnpm install --frozen-lockfile --filter seventwos-workspace-desktop"
+
+            - name: Install Debian Playwright dependencies
+              if: inputs.container-image != ''
+              working-directory: apps/desktop
+              run: |
+                  apt-get update
+                  apt-get install --no-install-recommends -y xvfb
+                  pnpm exec playwright install-deps chromium
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
@@ -81,7 +94,7 @@ jobs:
               shell: bash
               env:
                   # We need sudo on Linux as it is installed in /opt/
-                  RUN_AS: ${{ runner.os == 'Linux' && 'sudo -E' || '' }}
+                  RUN_AS: ${{ runner.os == 'Linux' && inputs.container-image == '' && 'sudo -E' || '' }}
                   PNPM_PATH: ${{ steps.pnpm.outputs.bin_dest }}
                   EXECUTABLE: ${{ steps.executable.outputs.path }}
 
