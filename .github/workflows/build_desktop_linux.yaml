@@ -4,10 +4,6 @@
 on:
     workflow_call:
         inputs:
-            ref:
-                type: string
-                required: false
-                description: "The git ref to checkout, defaults to the default branch"
             arch:
                 type: string
                 required: true
@@ -95,7 +91,6 @@ jobs:
 
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
-                  ref: ${{ inputs.ref }}
                   persist-credentials: false
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8

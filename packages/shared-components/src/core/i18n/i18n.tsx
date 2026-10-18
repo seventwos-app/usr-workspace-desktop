@@ -230,7 +230,9 @@ export function _tDom(text: TranslationKey, variables?: IVariables, tags?: Tags)
  */
 export function sanitizeForTranslation(text: string): string {
     // Add a non-breaking space so the regex doesn't trigger when translating.
-    return text.replace(/%\(([^)]*)\)/g, "%\xa0($1)");
+    // Neutralise every "%(" opener in linear time; matching through to ")" was
+    // quadratic on inputs with many unclosed "%(" sequences and missed nested ones.
+    return text.replaceAll("%(", "%\xa0(");
 }
 
 /*
