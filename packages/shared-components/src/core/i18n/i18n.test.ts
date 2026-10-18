@@ -8,7 +8,7 @@
 import counterpart from "counterpart";
 import { vi, describe, it, beforeEach, expect } from "vitest";
 
-import { registerTranslations, setMissingEntryGenerator, getLocale, setLocale } from "./i18n";
+import { registerTranslations, setMissingEntryGenerator, getLocale, setLocale, sanitizeForTranslation } from "./i18n";
 
 describe("i18n utils", () => {
     beforeEach(() => {
@@ -43,5 +43,27 @@ describe("i18n utils", () => {
 
         setLocale("en");
         expect(counterpart.setLocale).toHaveBeenCalledWith("en");
+    });
+
+    describe("sanitizeForTranslation", () => {
+        it("neutralises variable placeholders", () => {
+            expect(sanitizeForTranslation("Hi %(name)s")).toBe("Hi %\xa0(name)s");
+        });
+
+        it("neutralises nested and unclosed placeholders", () => {
+            expect(sanitizeForTranslation("%(a%(b)s")).toBe("%\xa0(a%\xa0(b)s");
+            expect(sanitizeForTranslation("%(open")).toBe("%\xa0(open");
+        });
+
+        it("leaves text without placeholders unchanged", () => {
+            expect(sanitizeForTranslation("100% (approx)")).toBe("100% (approx)");
+        });
+
+        it("handles long runs of unclosed openers quickly", () => {
+            const input = "%(".repeat(100_000);
+            const start = performance.now();
+            expect(sanitizeForTranslation(input)).toBe("%\xa0(".repeat(100_000));
+            expect(performance.now() - start).toBeLessThan(1000);
+        });
     });
 });
