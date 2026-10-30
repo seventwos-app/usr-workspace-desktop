@@ -2,13 +2,47 @@ name: Build shared component storybook
 on:
     merge_group: {}
     pull_request: {}
-    workflow_call: {}
+    workflow_call:
+        inputs:
+            force_build:
+                description: Build Storybook even when shared-component files did not change.
+                required: false
+                type: boolean
+                default: true
 
 permissions: {}
 
 jobs:
+    changes:
+        if: (github.event_name == 'pull_request' || github.event_name == 'merge_group') && !inputs.force_build
+        runs-on: ubuntu-latest
+        outputs:
+            storybook: ${{ steps.filter.outputs.storybook }}
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  persist-credentials: false
+
+            - name: Check for shared-component changes
+              id: filter
+              env:
+                  BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+              run: |
+                  git fetch --no-tags --depth=1 origin "$BASE_SHA"
+                  if git diff --quiet "$BASE_SHA" HEAD -- packages/shared-components/; then
+                      echo "storybook=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "storybook=true" >> "$GITHUB_OUTPUT"
+                  fi
+
     doc:
         name: Build storybook
+        needs: [changes]
+        if: >-
+            always() &&
+            (inputs.force_build ||
+            (needs.changes.result == 'success' && needs.changes.outputs.storybook == 'true'))
         runs-on: ubuntu-latest
         steps:
             - name: 🧮 Checkout code
